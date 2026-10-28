@@ -1,0 +1,29 @@
+[project]
+name = "ai-business-simulator-backend"
+version = "0.1.0"
+description = "Backend Control Plane for AI Business Simulator 2.5D"
+readme = "../README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "sqlalchemy>=2.0.35",
+    "alembic>=1.13.3",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.5.0",
+    "cryptography>=43.0.0",
+    "PyJWT>=2.9.0",
+    "httpx>=0.27.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+testpaths = ["../tests"]
