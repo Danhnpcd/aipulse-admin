@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: aipulse-admin
+    runtime: docker
+    plan: free
+    region: singapore
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:////app/data/simulator.db
+      - key: PORT
+        value: 8000
