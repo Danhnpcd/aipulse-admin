@@ -652,3 +652,35 @@ class ZaloMessageLog(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True, nullable=False)
 
 
+
+
+class VietQRConfig(Base):
+    __tablename__ = "vietqr_config"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default="singleton")
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    bank_id: Mapped[str] = mapped_column(String(32), default="MB", nullable=False)  # MB, VCB, TCB, VPB, ACB...
+    account_no: Mapped[str] = mapped_column(String(64), default="0988888888", nullable=False)
+    account_name: Mapped[str] = mapped_column(String(120), default="CONG TY CP AI PULSE", nullable=False)
+    webhook_secret: Mapped[str] = mapped_column(String(96), default=new_id, nullable=False)
+    exchange_rate_usd_vnd: Mapped[float] = mapped_column(Float, default=25400.0, nullable=False)
+    qr_template: Mapped[str] = mapped_column(String(32), default="compact2", nullable=False)  # compact, compact2, qr_only
+    auto_confirm_on_match: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False
+    )
+
+
+class RealAnalyticsEvent(Base):
+    __tablename__ = "real_analytics_events"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    event_type: Mapped[str] = mapped_column(String(32), index=True, nullable=False)  # PAGE_VIEW, ARTICLE_READ, LIKE, SHARE, DEAL_CLICK
+    url_path: Mapped[str] = mapped_column(String(256), index=True, nullable=False)
+    article_id: Mapped[int | None] = mapped_column(Integer, index=True, nullable=True)
+    project_slug: Mapped[str | None] = mapped_column(String(64), index=True, nullable=True)
+    visitor_hash: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
+    referrer: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    device_type: Mapped[str] = mapped_column(String(24), default="MOBILE", nullable=False)  # MOBILE | DESKTOP | TABLET
+    dwell_seconds: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True, nullable=False)

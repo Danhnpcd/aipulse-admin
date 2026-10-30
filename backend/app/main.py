@@ -6,7 +6,9 @@ from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnec
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
+from app.api.analytics_routes import analytics_router
 from app.api.business_routes import business_router
+from app.api.payment_routes import payment_router
 from app.api.routes import router as api_router
 from app.api.tiktok_fashion_routes import router as tiktok_router
 from app.api.zalo_routes import zalo_router
@@ -79,6 +81,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
+        allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|.*\.github\.io|.*\.onrender\.com|.*\.trycloudflare\.com)(:\d+)?",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -88,6 +91,8 @@ def create_app() -> FastAPI:
     app.include_router(business_router)
     app.include_router(tiktok_router)
     app.include_router(zalo_router)
+    app.include_router(payment_router)
+    app.include_router(analytics_router)
 
     @app.websocket("/ws/events")
     async def websocket_events(websocket: WebSocket, since_seq: int = Query(default=0, ge=0)) -> None:
