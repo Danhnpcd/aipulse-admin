@@ -1,0 +1,23 @@
+name: Cloud 24-7 Keep-Alive Heartbeat
+
+on:
+  schedule:
+    # Pings Cloud Server every 12 minutes so Render Free Tier stays awake 24/7 (750h/mo >= 744h max month)
+    # To STOP 24/7 keep-alive anytime: click "..." -> "Disable workflow" on GitHub Actions, or Suspend on Render.
+    - cron: "*/12 * * * *"
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Ping Unified Cloud Server Health Endpoint
+        env:
+          CLOUD_SERVER_URL: ${{ vars.CLOUD_SERVER_URL || 'https://aipulse-admin.onrender.com' }}
+        run: |
+          echo "Checking 24/7 Cloud Server: ${CLOUD_SERVER_URL}/api/health"
+          STATUS=$(curl -s -o /tmp/health.json -w "%{http_code}" --max-time 45 "${CLOUD_SERVER_URL}/api/health" || echo "000")
+          echo "HTTP Status: ${STATUS}"
+          if [ -f /tmp/health.json ]; then head -c 300 /tmp/health.json; echo ""; fi
+          exit 0

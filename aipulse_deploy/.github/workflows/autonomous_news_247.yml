@@ -1,0 +1,45 @@
+name: AI Pulse Cloud 24-7 Autonomous News & KeepAlive
+
+on:
+  schedule:
+    # Runs on GitHub Cloud 24/7 even when personal PC is completely turned OFF.
+    # To pause/stop anytime: click "..." -> "Disable workflow" in GitHub Actions tab.
+    - cron: "*/14 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cloud-pulse-247:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Checkout AI Pulse News Portal
+        uses: actions/checkout@v4
+
+      - name: Wake & Verify Unified Cloud Admin Server (Render 24/7 Keep-Alive)
+        env:
+          CLOUD_SERVER_URL: ${{ vars.CLOUD_SERVER_URL || 'https://aipulse-admin.onrender.com' }}
+        run: |
+          echo "Heartbeat ping -> ${CLOUD_SERVER_URL}/api/health"
+          curl -s -o /dev/null -w "Cloud Admin HTTP: %{http_code}\n" --max-time 45 "${CLOUD_SERVER_URL}/api/health" || true
+
+      - name: Run Autonomous AI News Crawler & Publisher
+        run: |
+          MinuteNow=$(date +%M)
+          # Publish new article roughly once every ~30 mins while keeping 14-min server heartbeat
+          python3 cloud_news_worker.py
+
+      - name: Commit & Deploy Updated News to GitHub Pages CDN
+        run: |
+          git config user.name "AI Pulse 24/7 Cloud Bot"
+          git config user.email "actions@users.noreply.github.com"
+          if ! git diff --quiet index.html 200.html; then
+            git add index.html 200.html
+            git commit -m "chore(news): auto-publish 24/7 real tech news via GitHub Cloud"
+            git push
+            echo "Published live to https://danhnpcd.github.io/aipulse-news/"
+          else
+            echo "Portal already up to date."
+          fi

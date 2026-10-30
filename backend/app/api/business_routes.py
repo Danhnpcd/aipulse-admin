@@ -877,7 +877,7 @@ def get_marketing_channels_report(
                         "description": "Tạo ngay một đường link HTTPS công cộng toàn cầu an toàn để khách hàng bên ngoài truy cập được trực tiếp vào máy chủ của bạn.",
                     }
                 ],
-            })(Path(r"d:\ai-business-simulator\tools\tunnel_state.json"))
+            })((Path(__file__).resolve().parents[3] / "tools" / "tunnel_state.json"))
         ))(),
     }
 

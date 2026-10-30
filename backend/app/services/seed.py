@@ -161,21 +161,75 @@ def seed_initial_data(db: Session) -> None:
 
     models_seed = [
         AIModel(
-            id="google-gemini:gemini-2.5-flash",
+            id="google-gemini:gemini-3.6-flash",
             provider_id="google-gemini",
-            model_id="gemini-2.5-flash",
-            display_name="Gemini 2.5 Flash (Free Tier Eligible)",
-            supported_tasks=["general", "research", "coding", "marketing", "finance"],
+            model_id="gemini-3.6-flash",
+            display_name="Gemini 3.6 Flash (Free Tier • Active Primary)",
+            supported_tasks=["general", "research", "coding", "marketing", "finance", "qa"],
             supports_tool_calling=True,
             supports_json_mode=True,
             supports_vision=True,
-            context_window=1000000,
+            context_window=1048576,
             input_cost_per_1k=0.0,
             output_cost_per_1k=0.0,
             tier=ModelTier.FREE.value,
             rate_limit_rpm=15,
-            quality_score=92,
-            quota_status=QuotaStatus.UNKNOWN.value,
+            quality_score=96,
+            quota_status=QuotaStatus.AVAILABLE.value,
+            quota_confidence=QuotaConfidence.UNKNOWN.value,
+        ),
+        AIModel(
+            id="google-gemini:gemini-3.5-flash",
+            provider_id="google-gemini",
+            model_id="gemini-3.5-flash",
+            display_name="Gemini 3.5 Flash (Free Tier • Fast Failover #1)",
+            supported_tasks=["general", "research", "coding", "marketing", "finance", "qa"],
+            supports_tool_calling=True,
+            supports_json_mode=True,
+            supports_vision=True,
+            context_window=1048576,
+            input_cost_per_1k=0.0,
+            output_cost_per_1k=0.0,
+            tier=ModelTier.FREE.value,
+            rate_limit_rpm=15,
+            quality_score=94,
+            quota_status=QuotaStatus.AVAILABLE.value,
+            quota_confidence=QuotaConfidence.UNKNOWN.value,
+        ),
+        AIModel(
+            id="google-gemini:gemini-3.5-flash-lite",
+            provider_id="google-gemini",
+            model_id="gemini-3.5-flash-lite",
+            display_name="Gemini 3.5 Flash Lite (Free Tier • High-Quota Reserve)",
+            supported_tasks=["general", "research", "coding", "marketing", "finance", "qa"],
+            supports_tool_calling=True,
+            supports_json_mode=True,
+            supports_vision=True,
+            context_window=1048576,
+            input_cost_per_1k=0.0,
+            output_cost_per_1k=0.0,
+            tier=ModelTier.FREE.value,
+            rate_limit_rpm=30,
+            quality_score=91,
+            quota_status=QuotaStatus.AVAILABLE.value,
+            quota_confidence=QuotaConfidence.UNKNOWN.value,
+        ),
+        AIModel(
+            id="google-gemini:gemini-3.8-flash",
+            provider_id="google-gemini",
+            model_id="gemini-3.8-flash",
+            display_name="Gemini 3.8 Flash (Free Tier • Latest Gen)",
+            supported_tasks=["general", "research", "coding", "marketing", "finance", "qa"],
+            supports_tool_calling=True,
+            supports_json_mode=True,
+            supports_vision=True,
+            context_window=1048576,
+            input_cost_per_1k=0.0,
+            output_cost_per_1k=0.0,
+            tier=ModelTier.FREE.value,
+            rate_limit_rpm=15,
+            quality_score=93,
+            quota_status=QuotaStatus.AVAILABLE.value,
             quota_confidence=QuotaConfidence.UNKNOWN.value,
         ),
         AIModel(
@@ -278,6 +332,12 @@ def seed_initial_data(db: Session) -> None:
     for m in models_seed:
         if not db.scalar(select(AIModel).where(AIModel.id == m.id)):
             db.add(m)
+
+    # Retire deprecated gemini-2.5-flash (HTTP 404 for new keys) so router uses 3.6/3.5/3.8 Flash
+    deprecated_m = db.scalar(select(AIModel).where(AIModel.id == "google-gemini:gemini-2.5-flash"))
+    if deprecated_m and deprecated_m.enabled:
+        deprecated_m.enabled = False
+        deprecated_m.status = "DEPRECATED"
 
     # 5. Transparent Demo Business Experiment & Test Payment Record (explicitly is_demo=True & is_test_payment=True)
     if not db.scalar(select(Project).where(Project.slug == "ai-invoice-extractor-sandbox")):

@@ -147,6 +147,23 @@ def classify_http_failure(
             model_id=model_id,
             http_status=400,
         )
+    if status_code == 404:
+        return ProviderError(
+            f"Model {model_id} not found or deprecated on {provider_id}: {body_text[:160]}",
+            category=ErrorCategory.PROVIDER_DOWN,
+            provider_id=provider_id,
+            model_id=model_id,
+            http_status=404,
+        )
+    if status_code == 503 and ("high demand" in lower or "overloaded" in lower or "temporarily" in lower):
+        return ProviderError(
+            f"Model {model_id} experiencing temporary high demand (HTTP 503) on {provider_id}",
+            category=ErrorCategory.RATE_LIMIT_429,
+            provider_id=provider_id,
+            model_id=model_id,
+            http_status=503,
+            retry_after_seconds=retry_after or 20,
+        )
     if status_code >= 500:
         return ProviderError(
             f"Upstream provider {provider_id} unavailable (HTTP {status_code})",
@@ -170,13 +187,14 @@ class GeminiProvider(AIProvider):
     DEFAULT_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
     async def generate(self, request: ProviderRequest, api_key: str | None = None) -> ProviderResponse:
-        if not api_key:
+        if not api_key or not api_key.strip():
             raise ProviderError(
                 "Missing API key for Google Gemini provider",
                 category=ErrorCategory.INVALID_API_KEY,
                 provider_id=self.provider_id,
                 model_id=request.model_id,
             )
+        api_key = api_key.strip()
         base = (self.base_url or self.DEFAULT_BASE).rstrip("/")
         url = f"{base}/models/{request.model_id}:generateContent"
         payload: dict[str, Any] = {
@@ -185,6 +203,7 @@ class GeminiProvider(AIProvider):
             "generationConfig": {
                 "temperature": request.temperature,
                 "maxOutputTokens": request.max_tokens,
+                "thinkingConfig": {"thinkingBudget": request.metadata.get("thinking_budget", 0)},
             },
         }
         if request.require_json:
@@ -226,7 +245,9 @@ class GeminiProvider(AIProvider):
         data = resp.json()
         candidates = data.get("candidates") or []
         parts = (((candidates[0] if candidates else {}).get("content") or {}).get("parts")) or []
-        content = "\n".join(p.get("text", "") for p in parts if "text" in p).strip()
+        content = "\n".join(p.get("text", "") for p in parts if "text" in p and not p.get("thought")).strip()
+        if not content:
+            content = "\n".join(p.get("text", "") for p in parts if "text" in p).strip()
         usage = data.get("usageMetadata") or {}
         return ProviderResponse(
             content=content or "(Empty response from Gemini)",

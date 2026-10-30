@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liên Hệ Tòa Soạn & Hợp Tác Quảng Cáo — AI Pulse News</title>
+  <meta name="description" content="Liên hệ với ban biên tập AI Pulse News để gửi bài viết, phản hồi hoặc hợp tác đặt banner quảng cáo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: #0f172a;
+      --border: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+    }
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo-badge span { color: var(--cyan); }
+    .back-btn {
+      color: var(--cyan);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: var(--cyan);
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .subhead {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .contact-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+    .contact-card h3 {
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .contact-card a {
+      color: var(--cyan);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .contact-card a:hover { text-decoration: underline; }
+    .form-wrap {
+      background: rgba(2, 6, 23, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-top: 1rem;
+    }
+    .form-wrap h2 {
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 0.35rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    button.submit-btn {
+      background: var(--cyan);
+      color: #030712;
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 1.8rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button.submit-btn:hover {
+      background: #7dd3fc;
+      transform: translateY(-1px);
+    }
+    .success-alert {
+      display: none;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--emerald);
+      color: #6ee7b7;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    footer {
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-nav">
+      <a href="index.html" class="logo-badge">⚡ <span>AI PULSE</span> NEWS</a>
+      <a href="index.html" class="back-btn">← Quay lại Trang Chủ</a>
+    </div>
+
+    <h1>Liên Hệ & Hợp Tác Quảng Cáo</h1>
+    <p class="subhead">Chúng tôi luôn sẵn sàng lắng nghe mọi ý kiến đóng góp, bài vở cộng tác và cơ hội tài trợ thương hiệu.</p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>📰 Ban Biên Tập & Góp Ý</h3>
+        <p>Gửi thông cáo báo chí, bài viết cộng tác hoặc đính chính thông tin:</p>
+        <a href="mailto:editorial@aipulse.vn">editorial@aipulse.vn</a>
+        <p style="margin-top:8px; font-size:12px; color:#64748b;">Cc: danhnpcd@gmail.com</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>📢 Đặt Quảng Cáo & Banner</h3>
+        <p>Hợp tác đặt banner tài trợ, Google AdSense Direct hoặc bài PR công nghệ:</p>
+        <a href="mailto:ads@aipulse.vn">ads@aipulse.vn</a>
+        <p style="margin-top:8px; font-size:12px; color:#64748b;">Phản hồi trong 24 giờ làm việc</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>📍 Trụ Sở Vận Hành</h3>
+        <p>Hà Nội & TP. Hồ Chí Minh, Việt Nam</p>
+        <p style="margin-top:4px; font-size:12px; color:#64748b;">Hạ tầng CDN & Điện toán đám mây toàn cầu</p>
+      </div>
+    </div>
+
+    <div class="form-wrap">
+      <h2>Gửi Tin Nhắn Nhanh Cho Tòa Soạn</h2>
+      <div id="successMsg" class="success-alert">
+        ✅ Cảm ơn bạn! Ban biên tập AI Pulse News đã nhận được thư của bạn và sẽ liên hệ lại qua email trong thời gian sớm nhất.
+      </div>
+
+      <form id="contactForm" onsubmit="handleContactSubmit(event)">
+        <div class="form-group">
+          <label>Họ và Tên *</label>
+          <input type="text" id="senderName" required placeholder="Nguyễn Văn A" />
+        </div>
+        <div class="form-group">
+          <label>Địa Chỉ Email Của Bạn *</label>
+          <input type="email" id="senderEmail" required placeholder="email@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Chủ Đề Liên Hệ *</label>
+          <select id="topicSelect">
+            <option value="editorial">Góp ý bài viết & Đề xuất chủ đề công nghệ</option>
+            <option value="advertising">Hợp tác quảng cáo & Đặt banner thương hiệu</option>
+            <option value="press">Gửi thông cáo báo chí sự kiện AI</option>
+            <option value="technical">Báo lỗi kỹ thuật trên website</option>
+            <option value="other">Chủ đề khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nội Dung Thư *</label>
+          <textarea id="messageContent" rows="5" required placeholder="Vui lòng mô tả chi tiết nội dung bạn muốn gửi tới ban biên tập..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Gửi Tin Nhắn Ngay →</button>
+      </form>
+    </div>
+
+    <footer>
+      <p>© 2026 AI Pulse News Vietnam. Toàn bộ quyền được bảo lưu.</p>
+      <div class="footer-links">
+        <a href="privacy.html">Chính Sách Bảo Mật</a> •
+        <a href="terms.html">Điều Khoản Dịch Vụ</a> •
+        <a href="about.html">Giới Thiệu Tòa Soạn</a> •
+        <a href="contact.html">Liên Hệ Hợp Tác</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('senderName').value;
+      const email = document.getElementById('senderEmail').value;
+      const topic = document.getElementById('topicSelect').value;
+      const message = document.getElementById('messageContent').value;
+
+      // Save locally
+      try {
+        const msgs = JSON.parse(localStorage.getItem('aipulse_contact_messages') || '[]');
+        msgs.push({ name, email, topic, message, time: new Date().toISOString() });
+        localStorage.setItem('aipulse_contact_messages', JSON.stringify(msgs));
+      } catch (err) {}
+
+      document.getElementById('contactForm').reset();
+      document.getElementById('successMsg').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+      }, 7000);
+    }
+  </script>
+</body>
+</html>

@@ -28,6 +28,8 @@ from app.models.entities import (
     TaskEvent,
     UsageRecord,
     User,
+    ZaloGuardianConfig,
+    ZaloMessageLog,
 )
 
 __all__ = [
@@ -60,4 +62,6 @@ __all__ = [
     "TaskEvent",
     "UsageRecord",
     "User",
+    "ZaloGuardianConfig",
+    "ZaloMessageLog",
 ]

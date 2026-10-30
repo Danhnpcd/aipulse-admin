@@ -151,46 +151,67 @@ class ProviderHealthChecker:
         vault: CredentialVault | None = None,
     ) -> dict[str, Any]:
         vault = vault or get_vault()
-        model = db.scalar(
-            select(AIModel).where(AIModel.provider_id == provider.id, AIModel.enabled.is_(True))
+        models = list(
+            db.scalars(
+                select(AIModel)
+                .where(AIModel.provider_id == provider.id, AIModel.enabled.is_(True))
+                .order_by(AIModel.quality_score.desc())
+            ).all()
         )
-        if not model:
+        if not models:
             return {"ok": False, "error": "No enabled models configured for this provider"}
 
-        api_key: str | None = None
-        cred = db.scalar(
-            select(Credential)
-            .where(Credential.provider_id == provider.id, Credential.enabled.is_(True))
-            .order_by(Credential.priority.asc())
+        creds = list(
+            db.scalars(
+                select(Credential)
+                .where(
+                    Credential.provider_id == provider.id,
+                    Credential.enabled.is_(True),
+                    Credential.auth_status != "INVALID",
+                )
+                .order_by(Credential.priority.asc())
+            ).all()
         )
-        if cred:
-            api_key = vault.decrypt(cred.encrypted_secret)
-        elif provider.requires_credential and not provider.is_demo:
+        if not creds and provider.requires_credential and not provider.is_demo:
             provider.health_status = "MISSING_CREDENTIAL"
             provider.last_checked_at = datetime.now(timezone.utc)
             db.flush()
-            return {"ok": False, "error": "No active API credential configured"}
+            return {"ok": False, "error": "No active valid API credential configured"}
 
         adapter = build_provider_adapter(provider.provider_type, provider.id, provider.base_url)
-        if provider.provider_type == "mock":
-            adapter.behavior_map[model.model_id] = model.mock_behavior  # type: ignore[attr-defined]
-        try:
-            res = await adapter.test_connection(model.model_id, api_key=api_key)
-            provider.health_status = "HEALTHY"
-            provider.last_error = None
-            provider.last_checked_at = datetime.now(timezone.utc)
-            if cred:
-                cred.auth_status = "VERIFIED"
-                cred.last_error = None
-            db.flush()
-            return res
-        except ProviderError as exc:
-            QuotaTracker.record_failure(db, provider, model, exc)
-            if cred and exc.category in (ErrorCategory.INVALID_API_KEY, ErrorCategory.PERMISSION_DENIED):
-                cred.auth_status = "INVALID"
-                cred.last_error = exc.message
-            db.flush()
-            return {"ok": False, "error": exc.message, "category": exc.category.value}
+        cred_candidates: list[Credential | None] = creds if creds else [None]
+        last_exc: ProviderError | None = None
+
+        for cred in cred_candidates:
+            api_key = vault.decrypt(cred.encrypted_secret) if cred else None
+            for model in models:
+                if provider.provider_type == "mock":
+                    adapter.behavior_map[model.model_id] = model.mock_behavior  # type: ignore[attr-defined]
+                try:
+                    res = await adapter.test_connection(model.model_id, api_key=api_key)
+                    provider.health_status = "HEALTHY"
+                    provider.last_error = None
+                    provider.last_checked_at = datetime.now(timezone.utc)
+                    model.quota_status = QuotaStatus.AVAILABLE.value
+                    model.last_checked_at = datetime.now(timezone.utc)
+                    if cred:
+                        cred.auth_status = "VERIFIED"
+                        cred.last_error = None
+                    db.flush()
+                    return res
+                except ProviderError as exc:
+                    last_exc = exc
+                    QuotaTracker.record_failure(db, provider, model, exc)
+                    if cred and exc.category in (ErrorCategory.INVALID_API_KEY, ErrorCategory.PERMISSION_DENIED):
+                        cred.auth_status = "INVALID"
+                        cred.last_error = exc.message
+                        break  # Try next credential
+                    continue  # Try next model (e.g. if one model is 503 or 404)
+
+        db.flush()
+        if last_exc:
+            return {"ok": False, "error": last_exc.message, "category": last_exc.category.value}
+        return {"ok": False, "error": "All models/credentials failed health check"}
 
 
 class UsageRecorder:
@@ -317,12 +338,13 @@ class FallbackPolicy:
 
         eligible: list[CandidateModel] = []
         for provider, model in raw_pairs:
-            # Verify credential availability if required
+            # Verify credential availability if required (skipping known INVALID credentials)
             cred = db.scalar(
                 select(Credential)
                 .where(
                     Credential.provider_id == provider.id,
                     Credential.enabled.is_(True),
+                    Credential.auth_status != "INVALID",
                     (Credential.model_id.is_(None)) | (Credential.model_id == model.model_id),
                 )
                 .order_by(Credential.priority.asc())

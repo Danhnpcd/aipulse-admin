@@ -554,8 +554,11 @@ def publish_article_to_live_portal(article: dict[str, Any]) -> bool:
     Append approved real article to workspaces/aipulse-vietnam-news-media/public/index.html
     and redeploy directly to Surge.sh CDN (aipulse-vn.surge.sh).
     """
-    deploy_dir = Path(r"d:\ai-business-simulator\aipulse_deploy")
-    ws_dir = Path(r"d:\ai-business-simulator\workspaces\aipulse-vietnam-news-media\public")
+    _root = Path(__file__).resolve().parents[3]
+    deploy_dir = _root / "aipulse_deploy"
+    ws_dir = _root / "workspaces" / "aipulse-vietnam-news-media" / "public"
+    if not ws_dir.exists():
+        ws_dir = deploy_dir
     html_file = ws_dir / "index.html"
 
     if not html_file.exists():
@@ -608,9 +611,14 @@ async def run_30min_periodic_news_loop() -> None:
     while True:
         try:
             with db_module.SessionLocal() as db:
+                from app.models.entities import SystemSetting
+                sys_row = db.scalar(select(SystemSetting).where(SystemSetting.id == "singleton"))
+                if sys_row and sys_row.system_paused:
+                    await asyncio.sleep(60.0)
+                    continue
                 ingest_and_queue_articles_for_approval(db, max_articles=3)
             import sys
-            scripts_dir = Path(r"d:\ai-business-simulator\scripts")
+            scripts_dir = Path(__file__).resolve().parents[3] / "scripts"
             if str(scripts_dir) not in sys.path:
                 sys.path.insert(0, str(scripts_dir))
             try:

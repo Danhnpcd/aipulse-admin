@@ -1,0 +1,4 @@
+# Google AdSense Authorized Digital Sellers (ads.txt)
+# Website: https://danhnpcd.github.io/aipulse-news/
+# Publisher: AI Pulse News Vietnam
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

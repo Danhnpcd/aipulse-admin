@@ -1,0 +1,16 @@
+{
+  "channel_name": "Fashion Muse VN (@fashionmuse.vn)",
+  "follower_count": 2450,
+  "monetization_active": true,
+  "tiktok_shop_creator_active": true,
+  "creator_rewards_eligible": true,
+  "session_cookies_file": "config/tiktok_session_cookies.json",
+  "default_schedule_hours": [
+    "11:30",
+    "20:00"
+  ],
+  "auto_disclose_commercial": true,
+  "allow_comments": true,
+  "allow_duet": true,
+  "allow_stitch": true
+}

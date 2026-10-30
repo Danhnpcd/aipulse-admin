@@ -153,6 +153,25 @@ INITIAL_AGENTS: list[dict[str, Any]] = [
         "cost_limit_usd": 1.0,
         "max_loops": 3,
     },
+    {
+        "id": "zalo-system-guardian",
+        "name": "Zalo AI Guardian",
+        "role": "Trợ lý Quản trị Hệ thống & Liên lạc Zalo 24/7",
+        "room_id": "command-center",
+        "avatar_color": "#0068ff",
+        "tile_x": 3.15,
+        "tile_y": 1.95,
+        "system_prompt": (
+            "Bạn là Trợ lý AI Quản lý Hệ thống 24/7 của chủ sở hữu qua kênh Zalo. "
+            "Giám sát sức khỏe máy chủ, Cloudflare Tunnel, tác vụ AI, chống Sleep, tự động phục hồi lỗi "
+            "và báo cáo trung thực 100% không bịa số liệu."
+        ),
+        "allowed_tools": ["system_diagnostics", "tunnel_heal", "zalo_notify", "task_control"],
+        "permissions": ["read:company", "control:guardian", "notify:zalo"],
+        "token_limit": 32000,
+        "cost_limit_usd": 1.0,
+        "max_loops": 4,
+    },
 ]
 
 

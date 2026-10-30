@@ -602,3 +602,53 @@ class PaymentWebhookLog(Base):
     payload_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
     processed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
 
+
+class ZaloGuardianConfig(Base):
+    __tablename__ = "zalo_guardian_config"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default="singleton")
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    receive_mode: Mapped[str] = mapped_column(String(24), default="POLLING", nullable=False)  # POLLING | WEBHOOK
+    encrypted_bot_token: Mapped[str | None] = mapped_column(Text, nullable=True)
+    masked_bot_token: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    bot_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    bot_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    bot_username: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    connection_status: Mapped[str] = mapped_column(String(32), default="UNCONFIGURED", nullable=False)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    owner_chat_id: Mapped[str | None] = mapped_column(String(96), nullable=True)
+    owner_display_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    pairing_pin: Mapped[str] = mapped_column(String(16), default="886886", nullable=False)
+    webhook_secret: Mapped[str] = mapped_column(String(96), default=new_id, nullable=False)
+    notify_on_critical_error: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    notify_on_tunnel_change: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    notify_on_task_attention: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    notify_on_wakeup_recovery: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    periodic_report_minutes: Mapped[int] = mapped_column(Integer, default=240, nullable=False)
+    anti_sleep_enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    auto_heal_tunnels: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    last_update_id: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    last_heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_periodic_report_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False
+    )
+
+
+class ZaloMessageLog(Base):
+    __tablename__ = "zalo_message_logs"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    direction: Mapped[str] = mapped_column(String(24), index=True, nullable=False)  # INBOUND | OUTBOUND | PROACTIVE_ALERT
+    channel: Mapped[str] = mapped_column(String(24), default="ZALO", nullable=False)  # ZALO | WEB_CONSOLE
+    chat_id: Mapped[str] = mapped_column(String(96), index=True, nullable=False)
+    sender_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    category: Mapped[str] = mapped_column(String(32), default="CHAT", nullable=False)
+    ai_model_used: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    delivered: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    external_message_id: Mapped[str | None] = mapped_column(String(128), index=True, nullable=True)
+    metadata_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True, nullable=False)
+
+

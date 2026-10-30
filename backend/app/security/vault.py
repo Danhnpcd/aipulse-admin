@@ -1,3 +1,5 @@
+import base64
+import hashlib
 import os
 from pathlib import Path
 from cryptography.fernet import Fernet, InvalidToken
@@ -19,7 +21,13 @@ class CredentialVault:
         settings = get_settings()
         raw_key = explicit_key or os.environ.get("CREDENTIAL_ENCRYPTION_KEY") or settings.CREDENTIAL_ENCRYPTION_KEY
         if raw_key:
-            return raw_key.encode("utf-8") if isinstance(raw_key, str) else raw_key
+            key_bytes = raw_key.strip().encode("utf-8") if isinstance(raw_key, str) else raw_key.strip()
+            try:
+                Fernet(key_bytes)
+                return key_bytes
+            except Exception:
+                # Deterministically derive a valid 32-byte urlsafe base64 Fernet key from any secret string
+                return base64.urlsafe_b64encode(hashlib.sha256(key_bytes).digest())
 
         key_path = Path(settings.LOCAL_VAULT_KEY_PATH)
         if key_path.exists():

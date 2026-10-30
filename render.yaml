@@ -4,10 +4,27 @@ services:
     runtime: docker
     plan: free
     region: singapore
+    healthCheckPath: /api/health
     envVars:
       - key: APP_ENV
         value: production
+      - key: DEMO_MODE
+        value: "false"
       - key: DATABASE_URL
         value: sqlite:////app/data/simulator.db
-      - key: PORT
-        value: 8000
+      - key: PUBLIC_NEWS_URL
+        value: https://danhnpcd.github.io/aipulse-news/
+      - key: ZALO_OWNER_CHAT_ID
+        value: 8b98675fd21c3b42620d
+      - key: ZALO_OWNER_NAME
+        value: Công Danh
+      - key: ZALO_RECEIVE_MODE
+        value: WEBHOOK
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: CREDENTIAL_ENCRYPTION_KEY
+        generateValue: true
+      - key: ZALO_BOT_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

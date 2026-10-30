@@ -1,0 +1,15 @@
+.env
+.env.*
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+.local_vault.key
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/node_modules/
+**/*cookies*.json
+workspaces/tiktok-fashion-ai-automation/published/final_videos/*.mp4
+workspaces/tiktok-fashion-ai-automation/published/*.mp4

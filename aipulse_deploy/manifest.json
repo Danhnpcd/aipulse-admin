@@ -1,0 +1,24 @@
+{
+  "name": "AI Pulse News - Cổng Tin Tức AI & Công Nghệ",
+  "short_name": "AI Pulse",
+  "description": "Cập nhật tin tức Trí Tuệ Nhân Tạo, Công Nghệ Số, Đánh Giá Tool AI & Kiếm Tiền MMO 24/7",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#0284c7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=192&h=192&q=80",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=512&h=512&q=80",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

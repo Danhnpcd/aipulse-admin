@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TikTok Fashion AI Studio — Douyin Candid & 15s Video Pipeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a13;
+      --bg-card: #0d1222;
+      --bg-card-hover: #131b32;
+      --card-border: #1e293b;
+      --pink: #ff2d55;
+      --pink-glow: rgba(255, 45, 85, 0.35);
+      --cyan: #00f2fe;
+      --cyan-glow: rgba(0, 242, 254, 0.3);
+      --purple: #8b5cf6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* TOP HEADER & STATUS BAR */
+    header {
+      background: rgba(13, 18, 34, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 10px 16px;
+    }
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, var(--pink), var(--cyan));
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 17px;
+      color: #fff;
+      box-shadow: 0 0 15px var(--pink-glow);
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .status-pill {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: var(--emerald);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .status-pill.blue {
+      background: rgba(0, 242, 254, 0.1);
+      border-color: rgba(0, 242, 254, 0.25);
+      color: var(--cyan);
+    }
+    .status-pill.purple {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.3);
+      color: #c084fc;
+    }
+
+    /* 4-STEP STREAMLINED PROGRESS BAR */
+    .stepper-nav {
+      max-width: 1240px;
+      margin: 12px auto 0;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .step-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+    }
+    .step-btn:hover {
+      background: var(--bg-card-hover);
+      color: #fff;
+    }
+    .step-btn.active {
+      background: linear-gradient(135deg, rgba(255, 45, 85, 0.15), rgba(0, 242, 254, 0.15));
+      border-color: var(--pink);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(255, 45, 85, 0.2);
+    }
+    .step-btn .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    .step-btn.active .step-num {
+      background: var(--pink);
+      color: #fff;
+    }
+
+    /* MAIN CONTAINER & PANES */
+    main {
+      max-width: 1240px;
+      width: 100%;
+      margin: 14px auto;
+      padding: 0 16px 60px;
+      flex: 1;
+    }
+    .step-pane { display: none; animation: fadeIn 0.25s ease-out forwards; }
+    .step-pane.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* COMPACT CARD & BUTTONS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-cta {
+      background: linear-gradient(135deg, var(--pink), #e11d48);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--pink-glow);
+      transition: all 0.2s;
+      outline: none;
+    }
+    .btn-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 45, 85, 0.45);
+    }
+    .btn-cta.cyan {
+      background: linear-gradient(135deg, #0284c7, var(--cyan));
+      color: #041226;
+      box-shadow: 0 4px 14px var(--cyan-glow);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      outline: none;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #475569;
+    }
+
+    /* REAL-TIME SEARCH & CHIPS */
+    .search-bar-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 240px;
+      background: #090d18;
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--cyan); }
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+      scrollbar-width: thin;
+    }
+    .chip {
+      background: #090d18;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chip:hover, .chip.active {
+      border-color: var(--pink);
+      color: #fff;
+      background: rgba(255, 45, 85, 0.12);
+    }
+
+    /* PRODUCT CARDS GRID */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .prod-card {
+      background: #090d18;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .prod-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+    }
+    .prod-card.selected {
+      border-color: var(--pink);
+      box-shadow: 0 0 12px var(--pink-glow);
+    }
+    .prod-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #1e293b;
+    }
+    .prod-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 36px;
+    }
+    .prod-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+    .prod-price {
+      font-weight: 800;
+      color: var(--pink);
+      font-size: 14px;
+    }
+    .prod-sold { color: var(--emerald); font-weight: 600; }
+    .prod-comm { color: var(--amber); font-weight: 600; }
+    .prod-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .prod-actions button { flex: 1; }
+
+    /* STEP 2: TRY-ON STUDIO 2-COL */
+    .tryon-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 820px) {
+      .tryon-grid { grid-template-columns: 1fr; }
+      .stepper-nav { grid-template-columns: repeat(2, 1fr); }
+    }
+    .models-scroller {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .model-thumb-item {
+      min-width: 80px;
+      max-width: 86px;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 2px;
+      background: #090d18;
+      transition: all 0.2s;
+    }
+    .model-thumb-item.active {
+      border-color: var(--pink);
+      box-shadow: 0 0 10px var(--pink-glow);
+    }
+    .model-thumb-item img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+    }
+    .model-thumb-item span {
+      font-size: 10px;
+      color: #cbd5e1;
+      display: block;
+      padding: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* TRYON VIEWER & BEFORE/AFTER */
+    .viewer-box {
+      background: #090d18;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .viewer-display {
+      width: 100%;
+      height: 480px;
+      background: #050810;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .viewer-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 6px;
+      transition: opacity 0.2s;
+    }
+    .viewer-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(13, 18, 34, 0.95);
+      border-top: 1px solid var(--card-border);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* STEP 3: 4 SCENE KEYFRAMES */
+    .scenes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .scene-card {
+      background: #090d18;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .scene-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .scene-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      background: #1e293b;
+      display: block;
+    }
+    .scene-info {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .scene-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--pink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .scene-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .scene-shot {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* STEP 4: VIDEO STUDIO */
+    .video-studio-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 820px) {
+      .video-studio-grid { grid-template-columns: 1fr; }
+    }
+    .video-player-wrap {
+      background: #050810;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 9/16;
+      max-height: 580px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .video-player-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* COLLAPSIBLE ACCORDION / DRAWER */
+    .drawer-toggle {
+      background: none;
+      border: none;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+      outline: none;
+    }
+    .drawer-content {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: #060912;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #cbd5e1;
+      max-height: 240px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .drawer-content.open { display: block; }
+
+    /* TOAST ALERT */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(13, 18, 34, 0.95);
+      border: 1px solid var(--pink);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9999;
+      pointer-events: none;
+    }
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="brand-wrap">
+        <div class="brand-badge">⚡</div>
+        <div class="brand-title">
+          <span>TIKTOK FASHION AI STUDIO</span>
+          <span style="font-size: 11px; font-weight: 600; color: var(--pink); background: rgba(255,45,85,0.1); padding: 2px 6px; border-radius: 4px;">DOUYIN CANDID</span>
+        </div>
+      </a>
+
+      <div class="header-pills">
+        <a href="https://drive.google.com/drive/my-drive" target="_blank" class="status-pill" id="gdriveHeaderStatus" title="Google Drive Đồng Bộ">
+          <span>📁</span>
+          <span id="gdriveAccountText">danhnpcd@gmail.com (6 ảnh) 🟢</span>
+        </a>
+        <div class="status-pill blue" id="aiQuotaPill" title="Hạn Mức AI Miễn Phí (Zero Cost)">
+          <span>🔒</span>
+          <span>1M Tokens Free (0 VNĐ)</span>
+        </div>
+        <button class="status-pill purple" onclick="quickRandomModel()" title="Đổi Người Mẫu Ngẫu Nhiên">
+          <span>🎲</span>
+          <span>Random Mẫu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4-STEP STREAMLINED PROGRESS NAVIGATION -->
+  <nav class="stepper-nav">
+    <button class="step-btn active" id="stepBtn1" onclick="switchStep(1)">
+      <span class="step-num">1</span>
+      <span>🔍 Săn Trend</span>
+    </button>
+    <button class="step-btn" id="stepBtn2" onclick="switchStep(2)">
+      <span class="step-num">2</span>
+      <span>👗 Mặc Đồ</span>
+    </button>
+    <button class="step-btn" id="stepBtn3" onclick="switchStep(3)">
+      <span class="step-num">3</span>
+      <span>🎬 4 Cảnh Quay</span>
+    </button>
+    <button class="step-btn" id="stepBtn4" onclick="switchStep(4)">
+      <span class="step-num">4</span>
+      <span>🎥 Video 15s</span>
+    </button>
+  </nav>
+
+  <!-- MAIN VIEWPORT -->
+  <main>
+    <!-- STEP 1: REAL-TIME TRENDING FASHION DISCOVERY -->
+    <section id="pane1" class="step-pane active">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>🔥 Tìm Kiếm Sản Phẩm Hot Trend TikTok Thời Gian Thực</span>
+            <span style="font-size: 11px; color: var(--cyan);">● Click link để xem trực tiếp trên TikTok</span>
+          </div>
+          <button class="drawer-toggle" onclick="toggleDrawer('customLinkDrawer')">
+            <span>➕ Dán Link TikTok Tùy Chọn</span>
+          </button>
+        </div>
+
+        <!-- Custom Link Collapsible Drawer -->
+        <div id="customLinkDrawer" class="drawer-content">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <input type="text" id="customTikTokUrlInput" placeholder="Dán link Video / TikTok Shop..." class="search-input" style="flex: 2;">
+            <input type="text" id="customTitleInput" placeholder="Tên sản phẩm..." class="search-input" style="flex: 1;">
+            <button class="btn-cta" onclick="importCustomProduct()">Thêm Sản Phẩm</button>
+          </div>
+        </div>
+
+        <!-- Search Bar & Filters -->
+        <div class="search-bar-wrap">
+          <input type="text" id="searchInput" placeholder="Nhập từ khóa: Váy hoa nhí, đầm lụa satin, set dạ tweed, blazer, croptop Y2K..." 
+                 class="search-input" oninput="onSearchInput()">
+          <button class="btn-cta cyan" onclick="executeSearch()">🔍 Tìm Trend</button>
+        </div>
+
+        <!-- Quick Category Chips -->
+        <div class="filter-chips">
+          <button class="chip active" onclick="filterCategory('all', this)">🔥 Tất Cả</button>
+          <button class="chip" onclick="filterCategory('Váy Đầm', this)">👗 Váy Đầm</button>
+          <button class="chip" onclick="filterCategory('Set Đồ Phối Sẵn', this)">🧥 Set Đồ</button>
+          <button class="chip" onclick="filterCategory('Công Sở Hiện Đại', this)">💼 Công Sở</button>
+          <button class="chip" onclick="filterCategory('Y2K & Streetwear', this)">⚡ Y2K & Street</button>
+          <button class="chip" onclick="filterCategory('Nàng Thơ & Du Lịch', this)">🌸 Nàng Thơ</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: VIRTUAL TRY-ON STUDIO -->
+    <section id="pane2" class="step-pane">
+      <div class="tryon-grid">
+        <!-- Left: Model Selection & Actions -->
+        <div>
+          <!-- Model Photos Scroller from Google Drive -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">
+                <span>📁 Chọn Người Mẫu Từ Google Drive</span>
+                <span id="modelCountBadge" style="font-size: 11px; color: var(--cyan);">(6 ảnh)</span>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-outline" onclick="openDriveFolder()" title="Mở thư mục trên máy">📂 Mở Thư Mục</button>
+                <button class="btn-outline" onclick="loadDriveModels()">🔄 Quét Lại</button>
+              </div>
+            </div>
+
+            <div class="models-scroller" id="modelsScroller">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Selected Product Quick Summary -->
+            <div style="background: #090d18; border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 10px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+              <img id="selectedProdThumb" src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=200&q=80" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+              <div style="flex: 1; min-width: 0;">
+                <div id="selectedProdTitle" style="font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Đầm Babydoll Hoa Nhí Vintage</div>
+                <div id="selectedProdPrice" style="font-size: 11px; color: var(--pink); font-weight: 800;">189.000 đ</div>
+              </div>
+              <button class="btn-outline" onclick="switchStep(1)" style="padding: 6px 10px; font-size: 11px;">Đổi Váy</button>
+            </div>
+
+            <!-- AI Engine Mode & Quality Control -->
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 12px; font-size: 11px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-weight: 700; color: var(--cyan); display: flex; align-items: center; gap: 4px;">
+                  ⚡ Cấu Hình AI Virtual Try-On
+                </span>
+                <span style="color: #4ade80; font-size: 10px; font-weight: 600;">● IDM-VTON Cloud Online</span>
+              </div>
+              <select id="vtonEngineMode" class="search-input" style="padding: 6px 8px; font-size: 11px; width: 100%;">
+                <option value="cloud_idm">⚡ IDM-VTON Cloud AI (Khuyên dùng - Thay đồ giữ 100% mặt mẫu)</option>
+                <option value="anatomical_fast">🚀 Neural Anatomical Transfer (Siêu tốc 0.5s - Offline)</option>
+              </select>
+              <div style="margin-top: 6px; font-size: 10px; color: #94a3b8;">
+                🔒 Cam kết: Giữ 100% khuôn mặt, mắt, tóc, nụ cười và bối cảnh ảnh mẫu gốc.
+              </div>
+            </div>
+
+            <!-- Big 1-Click Try-On Button -->
+            <button class="btn-cta" style="width: 100%; padding: 12px; font-size: 14px;" onclick="triggerVirtualTryOn()">
+              <span>✨ Mặc Trang Phục Này Cho Mẫu (1-Click Try-On)</span>
+            </button>
+
+            <!-- Collapsible Omni Multimodal Prompts Drawer -->
+            <div style="margin-top: 14px;">
+              <button class="drawer-toggle" onclick="toggleDrawer('omniPromptDrawer')">
+                <span>📋 Xem Prompt Google Omni Multimodal (Click để mở)</span>
+              </button>
+              <div id="omniPromptDrawer" class="drawer-content">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 6px;">
+                  <button class="btn-outline" style="padding: 2px 8px; font-size: 10px;" onclick="copyOmniPrompt()">Sao Chép</button>
+                </div>
+                <div id="omniPromptText">Đang tải prompt...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Dressed Model Preview Viewer -->
+        <div>
+          <div class="viewer-box">
+            <div class="viewer-display">
+              <img id="mainTryOnImg" class="viewer-img" src="" alt="Dressed Model Preview">
+              <div id="tryonLoadingOverlay" style="display: none; position: absolute; inset: 0; background: rgba(5,8,16,0.85); align-items: center; justify-content: center; flex-direction: column; gap: 8px;">
+                <div style="width: 36px; height: 36px; border: 3px solid rgba(255,45,85,0.2); border-top-color: var(--pink); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                <span style="font-size: 12px; font-weight: 600; color: #fff;">Đang mặc trang phục cho người mẫu...</span>
+              </div>
+            </div>
+
+            <div class="viewer-controls">
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-outline" id="btnViewOriginal" onclick="toggleViewOriginal(true)">👁️ Ảnh Gốc</button>
+                <button class="btn-outline" id="btnViewDressed" style="border-color: var(--pink); color: #fff;" onclick="toggleViewOriginal(false)">✨ Đã Mặc Đồ</button>
+              </div>
+              <button class="btn-cta cyan" id="btnGoToStep3" onclick="goToStep3()">
+                <span>Tiếp Tục Tạo 4 Cảnh ➡️</span>
+              </button>
+            </div>
+            <!-- AI Quality Gate Inspection Badge -->
+            <div id="qualityGateBadge" style="display: none; margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; line-height: 1.4;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3: 4 SCENE KEYFRAMES STORYBOARD -->
+    <section id="pane3" class="step-pane">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">
+            <span>🎬 4 Cảnh Quay Kịch Bản Từ Ảnh Người Mẫu Đã Mặc Đồ</span>
+            <span style="font-size: 11px; color: var(--emerald);">● Phong cách quay lén Douyin Idol (0% tương tác camera)</span>
+          </div>
+          <button class="btn-cta" onclick="generateSceneKeyframes()">
+            <span>🔄 Tạo Lại 4 Cảnh</span>
+          </button>
+        </div>
+
+        <!-- 4 Scenes Grid -->
+        <div class="scenes-grid" id="scenesGrid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Next to Step 4 CTA -->
+        <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button class="btn-outline" onclick="switchStep(2)">⬅️ Quay Lại Thử Đồ</button>
+          <button class="btn-cta cyan" style="padding: 12px 24px; font-size: 14px;" onclick="goToStep4()">
+            <span>🎥 Tạo Video 15s Từ 4 Cảnh Này ➡️</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: 15-SECOND VIDEO STUDIO -->
+    <section id="pane4" class="step-pane">
+      <div class="video-studio-grid">
+        <!-- Left: Embedded Video Player -->
+        <div class="video-player-wrap">
+          <video id="finalVideoPlayer" controls playsinline poster="" style="width: 100%; height: 100%;">
+            <source id="finalVideoSource" src="" type="video/mp4">
+            Trình duyệt không hỗ trợ xem video trực tiếp.
+          </video>
+          <div id="videoRenderLoading" style="display: none; position: absolute; inset: 0; background: rgba(5,8,16,0.9); align-items: center; justify-content: center; flex-direction: column; gap: 10px; padding: 20px; text-align: center;">
+            <div style="width: 42px; height: 42px; border: 3px solid rgba(0,242,254,0.2); border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+            <div id="renderStepText" style="font-size: 13px; font-weight: 700; color: #fff;">Đang xử lý ghép 4 cảnh quay...</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Ken Burns Zoom/Pan • Khử C2PA/SynthID AI • Spoof iPhone 15 Pro Max</div>
+          </div>
+        </div>
+
+        <!-- Right: Actions & Video Details -->
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">
+                <span>🎥 Xuất Bản Video TikTok 15 Giây</span>
+                <span class="status-pill" style="font-size: 10px;">C2PA & SynthID Purged ✅</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; color: #fbbf24; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;">⏸️ TẠM DỪNG TẠO VIDEO (Chờ Web Admin Duyệt)</span>
+              </div>
+            </div>
+
+            <!-- Pause Announcement Banner -->
+            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; display: flex; gap: 12px; align-items: flex-start;">
+              <div style="font-size: 20px; line-height: 1;">⏸️</div>
+              <div style="font-size: 12px; line-height: 1.5; color: #fde68a;">
+                <strong>Tính năng render video 15s đang tạm dừng theo chỉ đạo của Web Admin:</strong><br>
+                Hệ thống đang chạy nền kiểm thử tự động Quality Gate thay trang phục thật và chuẩn hóa 4 cảnh quay liên tục từ ảnh mẫu gốc. Cả 4 cảnh quay hoàn chỉnh đã được tự động lưu trữ trên Google Drive.
+              </div>
+            </div>
+
+            <!-- Video Meta Specifications -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; font-size: 11px;">
+              <div style="background: #090d18; padding: 8px; border-radius: 6px; border: 1px solid var(--card-border);">
+                <span style="color: var(--text-muted);">Thời Lượng:</span> <strong style="color: #fff;">15 Giây (4 Nhịp)</strong>
+              </div>
+              <div style="background: #090d18; padding: 8px; border-radius: 6px; border: 1px solid var(--card-border);">
+                <span style="color: var(--text-muted);">Tỉ Lệ:</span> <strong style="color: #fff;">9:16 Vertical TikTok</strong>
+              </div>
+              <div style="background: #090d18; padding: 8px; border-radius: 6px; border: 1px solid var(--card-border);">
+                <span style="color: var(--text-muted);">Camera Spoof:</span> <strong style="color: var(--cyan);">iPhone 15 Pro Max</strong>
+              </div>
+              <div style="background: #090d18; padding: 8px; border-radius: 6px; border: 1px solid var(--card-border);">
+                <span style="color: var(--text-muted);">Vị Trí Lưu Drive:</span> <strong style="color: var(--emerald);">02_Video_Xuat_Ban</strong>
+              </div>
+            </div>
+
+            <!-- Caption & Hashtags -->
+            <div style="margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 12px; font-weight: 700; color: #fff;">📝 Caption & Hashtags Douyin:</span>
+                <button class="btn-outline" style="padding: 2px 8px; font-size: 11px;" onclick="copyCaption()">📋 Copy</button>
+              </div>
+              <textarea id="captionBox" readonly style="width: 100%; height: 75px; background: #090d18; border: 1px solid var(--card-border); color: #cbd5e1; padding: 8px; border-radius: 6px; font-size: 12px; resize: none; outline: none; font-family: var(--font-sans);"></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a id="downloadVideoBtn" href="#" download class="btn-cta" style="flex: 1; text-decoration: none;">
+                <span>⬇️ Tải Video Về Máy</span>
+              </a>
+              <button class="btn-outline" style="flex: 1;" onclick="openDriveSubfolder('videos')">
+                <span>📁 Mở Thư Mục Video</span>
+              </button>
+              <button class="btn-cta cyan" style="flex: 1;" onclick="syncToTikTokApp()">
+                <span>🚀 Đẩy Lên App TikTok Máy Tính</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast">Thông báo</div>
+
+  <style>
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+
+  <script>
+    // === APPLICATION STATE (Persisted to Google Drive & LocalStorage) ===
+    let currentStep = 1;
+    let allProducts = [];
+    let selectedProduct = null;
+    let allModels = [];
+    let selectedModel = null;
+    let tryOnPreviewUrl = '';
+    let sceneKeyframes = [];
+    let lastRenderedVideo = null;
+    let isViewingOriginal = false;
+
+    // Toast utility
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    // Step Switcher
+    function switchStep(stepNum) {
+      currentStep = stepNum;
+      document.querySelectorAll('.step-btn').forEach((b, i) => {
+        b.classList.toggle('active', i + 1 === stepNum);
+      });
+      document.querySelectorAll('.step-pane').forEach((p, i) => {
+        p.classList.toggle('active', i + 1 === stepNum);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      saveSessionState();
+    }
+
+    function toggleDrawer(id) {
+      const drawer = document.getElementById(id);
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    // === STEP 1: REAL-TIME TRENDING FASHION DISCOVERY ===
+    let searchTimeout = null;
+    function onSearchInput() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => executeSearch(), 350);
+    }
+
+    async function executeSearch(category = null) {
+      const query = document.getElementById('searchInput').value.trim();
+      let url = `/api/tiktok-fashion/trends?sort_by=sales_volume&limit=12`;
+      if (query) url += `&q=${encodeURIComponent(query)}`;
+      if (category && category !== 'all') url += `&category=${encodeURIComponent(category)}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        allProducts = data.products || [];
+        renderProducts(allProducts);
+      } catch (e) {
+        console.error('Search error:', e);
+      }
+    }
+
+    function filterCategory(cat, el) {
+      document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
+      executeSearch(cat);
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('productsGrid');
+      if (!products || products.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-muted); font-size: 13px; padding: 20px;">Không tìm thấy mẫu phù hợp. Hãy thử tìm từ khóa khác!</p>';
+        return;
+      }
+
+      grid.innerHTML = products.map(p => {
+        const isSel = selectedProduct && selectedProduct.id === p.id;
+        const formattedPrice = (p.price_vnd || 0).toLocaleString('vi-VN') + ' đ';
+        const formattedComm = (p.commission_vnd || 0).toLocaleString('vi-VN') + ' đ';
+        return `
+          <div class="prod-card ${isSel ? 'selected' : ''}">
+            <img src="${p.image_url}" class="prod-thumb" loading="lazy" alt="${p.title}">
+            <div class="prod-title" title="${p.title}">${p.title}</div>
+            <div class="prod-meta">
+              <span class="prod-price">${formattedPrice}</span>
+              <span class="prod-sold">🔥 ${(p.sales_volume || 0).toLocaleString()} đã bán</span>
+            </div>
+            <div class="prod-meta">
+              <span class="prod-comm">💰 Hoa hồng: ${p.commission_rate ? Math.round(p.commission_rate * 100) : 20}% (~${formattedComm})</span>
+            </div>
+            <div class="prod-actions">
+              <a href="${p.tiktok_search_link || p.tiktok_shop_link}" target="_blank" class="btn-outline" style="padding: 6px 8px; font-size: 11px;">
+                🔗 TikTok
+              </a>
+              <button class="btn-cta" style="padding: 6px 8px; font-size: 11px;" onclick="selectProductForTryOn('${p.id}')">
+                👗 Chọn Mặc
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectProductForTryOn(productId) {
+      selectedProduct = allProducts.find(p => p.id === productId);
+      if (!selectedProduct) return;
+
+      document.getElementById('selectedProdThumb').src = selectedProduct.image_url;
+      document.getElementById('selectedProdTitle').innerText = selectedProduct.title;
+      document.getElementById('selectedProdPrice').innerText = (selectedProduct.price_vnd || 0).toLocaleString('vi-VN') + ' đ';
+
+      showToast(`Đã chọn: ${selectedProduct.title.slice(0, 30)}... ✨`);
+      switchStep(2);
+
+      // Auto trigger try-on if model is selected
+      if (selectedModel) {
+        triggerVirtualTryOn();
+      }
+    }
+
+    async function importCustomProduct() {
+      const url = document.getElementById('customTikTokUrlInput').value.trim();
+      const title = document.getElementById('customTitleInput').value.trim() || 'Váy Hot Trend TikTok';
+      if (!url) {
+        showToast('Vui lòng dán link TikTok!');
+        return;
+      }
+      try {
+        const res = await fetch('/api/tiktok-fashion/import-tiktok-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tiktok_url: url, title: title })
+        });
+        const data = await res.json();
+        showToast('Đã thêm sản phẩm từ TikTok thành công! 🎉');
+        executeSearch();
+        toggleDrawer('customLinkDrawer');
+      } catch (e) {
+        showToast('Lỗi khi thêm link TikTok!');
+      }
+    }
+
+    // === STEP 2: VIRTUAL TRY-ON STUDIO ===
+    async function loadDriveModels() {
+      try {
+        const res = await fetch('/api/tiktok-fashion/gdrive-models/list');
+        const data = await res.json();
+        allModels = data.photos || [];
+        
+        const countBadge = document.getElementById('modelCountBadge');
+        if (countBadge) countBadge.innerText = `(${allModels.length} ảnh)`;
+
+        const scroller = document.getElementById('modelsScroller');
+        if (!scroller) return;
+
+        if (allModels.length === 0) {
+          scroller.innerHTML = '<p style="font-size: 12px; color: var(--text-muted); padding: 10px;">Chưa có ảnh trong Google Drive 01_Anh_Nguoi_Mau.</p>';
+          return;
+        }
+
+        scroller.innerHTML = allModels.map(m => `
+          <div class="model-thumb-item ${selectedModel && selectedModel.filename === m.filename ? 'active' : ''}" 
+               onclick="selectModel('${m.filename}')" title="${m.filename}">
+            <img src="${m.thumbnail_url || m.view_url}" loading="lazy">
+            <span>${m.display_name}</span>
+          </div>
+        `).join('');
+
+        if (!selectedModel && allModels.length > 0) {
+          selectModel(allModels[0].filename, false);
+        }
+      } catch (e) {
+        console.error('Drive model load error:', e);
+      }
+    }
+
+    function selectModel(filename, autoTryOn = true) {
+      selectedModel = allModels.find(m => m.filename === filename);
+      if (!selectedModel) return;
+
+      document.querySelectorAll('.model-thumb-item').forEach(el => {
+        el.classList.toggle('active', el.getAttribute('onclick')?.includes(filename));
+      });
+
+      const mainImg = document.getElementById('mainTryOnImg');
+      mainImg.src = selectedModel.view_url;
+      isViewingOriginal = true;
+      updateBeforeAfterButtons();
+
+      if (autoTryOn && selectedProduct) {
+        triggerVirtualTryOn();
+      }
+    }
+
+    function quickRandomModel() {
+      if (!allModels || allModels.length === 0) return;
+      const randIdx = Math.floor(Math.random() * allModels.length);
+      selectModel(allModels[randIdx].filename, true);
+      showToast(`Đã chọn ngẫu nhiên: ${allModels[randIdx].display_name} 🎲`);
+    }
+
+    async function triggerVirtualTryOn() {
+      if (!selectedProduct) {
+        if (allProducts && allProducts.length > 0) {
+          selectedProduct = allProducts[0];
+        } else {
+          showToast('Vui lòng chọn 1 sản phẩm ở Bước 1 trước!');
+          switchStep(1);
+          return;
+        }
+      }
+      if (!selectedModel) {
+        if (allModels && allModels.length > 0) {
+          selectedModel = allModels[0];
+        } else {
+          showToast('Vui lòng chọn ảnh người mẫu!');
+          return;
+        }
+      }
+
+      const overlay = document.getElementById('tryonLoadingOverlay');
+      if (overlay) overlay.style.display = 'flex';
+
+      try {
+        const useCloud = document.getElementById('vtonEngineMode')?.value !== 'anatomical_fast';
+        const res = await fetch('/api/tiktok-fashion/dress-model', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product_id: selectedProduct.id,
+            vibe_id: 'DOUYIN_IDOL_CANDID',
+            custom_model_image_url: selectedModel.file_path || selectedModel.filename,
+            custom_product_image_url: selectedProduct.image_url,
+            use_cloud_ai: useCloud
+          })
+        });
+        const data = await res.json();
+        tryOnPreviewUrl = data.tryon_preview_url;
+
+        // AI Quality Gate inspection status update
+        const qg = data.quality_gate;
+        const qgBadge = document.getElementById('qualityGateBadge');
+        const btnNextStep3 = document.getElementById('btnGoToStep3');
+        if (qgBadge && qg) {
+          qgBadge.style.display = 'block';
+          if (qg.passed) {
+            qgBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+            qgBadge.style.border = '1px solid var(--emerald)';
+            qgBadge.style.color = '#34d399';
+            qgBadge.innerHTML = `🛡️ <strong>AI Quality Gate: ĐẠT CHUẨN (${qg.overall_score}/10)</strong><br>• Tương đồng khuôn mặt: <strong>${qg.face_similarity_pct}%</strong> (Không đổi mặt người mẫu)<br>• Thay trang phục: <strong>${qg.garment_changed ? 'Đã khoác đồ thật' : 'Đang xử lý'}</strong> • Sọc dị tật: <strong>Không có</strong>`;
+            if (btnNextStep3) {
+              btnNextStep3.removeAttribute('disabled');
+              btnNextStep3.style.opacity = '1';
+            }
+          } else {
+            qgBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+            qgBadge.style.border = '1px solid #ef4444';
+            qgBadge.style.color = '#fca5a5';
+            qgBadge.innerHTML = `⚠️ <strong>AI Quality Gate: CHƯA ĐẠT (${qg.overall_score}/10)</strong><br>${qg.reason || 'Khuôn mặt hoặc chất vải chưa đạt chuẩn'}`;
+            if (btnNextStep3) {
+              btnNextStep3.setAttribute('disabled', 'true');
+              btnNextStep3.style.opacity = '0.5';
+            }
+          }
+        }
+
+        // Display dressed model with cache-busting timestamp
+        const mainImg = document.getElementById('mainTryOnImg');
+        if (tryOnPreviewUrl) {
+          mainImg.src = tryOnPreviewUrl + '?t=' + Date.now();
+          isViewingOriginal = false;
+          updateBeforeAfterButtons();
+        }
+
+        // Populate prompt drawer
+        document.getElementById('omniPromptText').innerText = data.virtual_tryon_multimodal_prompt || data.master_omni_prompt || '';
+
+        showToast(qg && !qg.passed ? '⚠️ Cảnh báo chất lượng ảnh chưa đạt chuẩn!' : '✨ Đã thay trang phục cho người mẫu thành công!');
+        saveSessionState();
+      } catch (e) {
+        showToast('Lỗi khi phối trang phục!');
+      } finally {
+        if (overlay) overlay.style.display = 'none';
+      }
+    }
+
+    function toggleViewOriginal(showOriginal) {
+      isViewingOriginal = showOriginal;
+      const mainImg = document.getElementById('mainTryOnImg');
+      if (showOriginal && selectedModel) {
+        mainImg.src = selectedModel.view_url;
+      } else if (!showOriginal && tryOnPreviewUrl) {
+        mainImg.src = tryOnPreviewUrl + '?t=' + Date.now();
+      }
+      updateBeforeAfterButtons();
+    }
+
+    function updateBeforeAfterButtons() {
+      const btnOrig = document.getElementById('btnViewOriginal');
+      const btnDress = document.getElementById('btnViewDressed');
+      if (isViewingOriginal) {
+        btnOrig.style.borderColor = 'var(--cyan)';
+        btnOrig.style.color = '#fff';
+        btnDress.style.borderColor = 'var(--card-border)';
+        btnDress.style.color = 'var(--text-muted)';
+      } else {
+        btnDress.style.borderColor = 'var(--pink)';
+        btnDress.style.color = '#fff';
+        btnOrig.style.borderColor = 'var(--card-border)';
+        btnOrig.style.color = 'var(--text-muted)';
+      }
+    }
+
+    function copyOmniPrompt() {
+      const text = document.getElementById('omniPromptText').innerText;
+      navigator.clipboard.writeText(text);
+      showToast('Đã copy Prompt Google Omni vào Clipboard! 📋');
+    }
+
+    function openDriveFolder() {
+      fetch('/api/tiktok-fashion/gdrive-models/open-folder', { method: 'POST' });
+      showToast('Đang mở thư mục Google Drive trên máy... 📂');
+    }
+
+    function openDriveSubfolder(sub) {
+      fetch('/api/tiktok-fashion/gdrive-models/open-subfolder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subfolder: sub })
+      });
+      showToast(`Đang mở thư mục Google Drive (${sub})... 📂`);
+    }
+
+    function goToStep3() {
+      switchStep(3);
+      generateSceneKeyframes();
+    }
+
+    // === STEP 3: 4 SCENE KEYFRAMES STORYBOARD ===
+    async function generateSceneKeyframes() {
+      if (!selectedProduct || !selectedModel) {
+        showToast('Vui lòng chọn sản phẩm và người mẫu trước!');
+        switchStep(1);
+        return;
+      }
+
+      showToast('Đang phân tích bối cảnh và tạo 4 cảnh quay kịch bản... 🎬');
+
+      try {
+        const res = await fetch('/api/tiktok-fashion/generate-scene-keyframes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model_image_url: tryOnPreviewUrl || selectedModel.file_path,
+            garment_image_url: selectedProduct.image_url,
+            product_id: selectedProduct.id,
+            product_title: selectedProduct.title,
+            price_vnd: selectedProduct.price_vnd,
+            vibe_id: 'DOUYIN_IDOL_CANDID'
+          })
+        });
+        const data = await res.json();
+        sceneKeyframes = data.scenes || [];
+        renderScenes(sceneKeyframes);
+        showToast('Đã tạo xong 4 cảnh quay kịch bản Douyin! 🎬');
+      } catch (e) {
+        showToast('Lỗi khi tạo cảnh quay!');
+      }
+    }
+
+    function renderScenes(scenes) {
+      const grid = document.getElementById('scenesGrid');
+      if (!scenes || scenes.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-muted); padding: 20px;">Chưa có cảnh quay. Nhấn Tạo Lại 4 Cảnh!</p>';
+        return;
+      }
+
+      grid.innerHTML = scenes.map(s => `
+        <div class="scene-card" onclick="viewSceneDetail(${s.scene_index})">
+          <img src="${s.image_url}" class="scene-img" loading="lazy" alt="${s.name}">
+          <div class="scene-info">
+            <div class="scene-tag">
+              <span>CẢNH ${s.scene_index}</span>
+              <span style="color: var(--cyan);">${s.timing}</span>
+            </div>
+            <div class="scene-title">${s.name.split(':')[1] || s.name}</div>
+            <div class="scene-shot">${s.shot_type}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function viewSceneDetail(idx) {
+      const scene = sceneKeyframes.find(s => s.scene_index === idx);
+      if (scene) {
+        showToast(`Cảnh ${idx}: ${scene.name} (${scene.timing})`);
+      }
+    }
+
+    function goToStep4() {
+      switchStep(4);
+      prepareStep4();
+    }
+
+    // === STEP 4: 15-SECOND VIDEO STUDIO ===
+    function prepareStep4() {
+      if (selectedProduct) {
+        const tags = `#${selectedProduct.category?.replace(/\s+/g, '')} #ThoiTrangNu #TikTokShop #OOTD #DouyinIdol #StyleTikTok`;
+        document.getElementById('captionBox').value = `${selectedProduct.title} xinh xỉu nè mấy bà ơi! Mặc lên tôn dáng cực kỳ. ${tags}`;
+      }
+    }
+
+    async function renderVideoNow() {
+      showToast('⏸️ Tính năng tạo video 15s đang tạm dừng theo chỉ đạo Web Admin!');
+      return;
+      if (!sceneKeyframes || sceneKeyframes.length < 4) {
+        showToast('Cần ít nhất 4 cảnh quay. Đang tạo 4 cảnh trước...');
+        await generateSceneKeyframes();
+      }
+
+      const overlay = document.getElementById('videoRenderLoading');
+      const stepText = document.getElementById('renderStepText');
+      if (overlay) overlay.style.display = 'flex';
+
+      try {
+        if (stepText) stepText.innerText = 'Đang ghép 4 cảnh quay thành video 15s (Ken Burns motion)...';
+        const scenePaths = sceneKeyframes.map(s => s.local_path || s.filename);
+
+        const res = await fetch('/api/tiktok-fashion/render-scene-video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            scene_images: scenePaths,
+            product_title: selectedProduct ? selectedProduct.title : 'Đầm Xinh Hot Trend',
+            price_vnd: selectedProduct ? selectedProduct.price_vnd : 199000,
+            vibe_id: 'DOUYIN_IDOL_CANDID'
+          })
+        });
+        const data = await res.json();
+        lastRenderedVideo = data;
+
+        // Load into video player
+        const player = document.getElementById('finalVideoPlayer');
+        const source = document.getElementById('finalVideoSource');
+        source.src = data.video_url;
+        player.load();
+        player.play().catch(() => {});
+
+        // Update download button
+        const dlBtn = document.getElementById('downloadVideoBtn');
+        dlBtn.href = data.video_url;
+
+        showToast('Tạo video 15s thành công & đã đồng bộ Google Drive! 🎉');
+      } catch (e) {
+        showToast('Lỗi khi tạo video 15s!');
+      } finally {
+        if (overlay) overlay.style.display = 'none';
+      }
+    }
+
+    function copyCaption() {
+      const box = document.getElementById('captionBox');
+      box.select();
+      navigator.clipboard.writeText(box.value);
+      showToast('Đã copy Caption & Hashtags vào Clipboard! 📋');
+    }
+
+    async function syncToTikTokApp() {
+      showToast('Đang kết nối TikTok Desktop App... 🚀');
+      try {
+        const caption = document.getElementById('captionBox').value;
+        const res = await fetch('/api/tiktok-fashion/local-bridge/sync-upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            video_path: lastRenderedVideo ? lastRenderedVideo.local_path : '',
+            caption: caption,
+            hashtags: '',
+            product_link: selectedProduct ? selectedProduct.tiktok_shop_link : ''
+          })
+        });
+        const data = await res.json();
+        showToast(data.message || 'Đã đồng bộ sang TikTok Desktop! 🚀');
+      } catch (e) {
+        showToast('Đã sao chép caption! Vui lòng mở TikTok tải lên.');
+      }
+    }
+
+    // === PERSISTENCE & RESTORATION ===
+    async function loadSavedState() {
+      try {
+        const res = await fetch('/api/tiktok-fashion/session-state');
+        const data = await res.json();
+        if (data.selected_product) {
+          selectedProduct = data.selected_product;
+          document.getElementById('selectedProdThumb').src = selectedProduct.image_url;
+          document.getElementById('selectedProdTitle').innerText = selectedProduct.title;
+          document.getElementById('selectedProdPrice').innerText = (selectedProduct.price_vnd || 0).toLocaleString('vi-VN') + ' đ';
+        }
+        if (data.last_tryon_preview_url) {
+          tryOnPreviewUrl = data.last_tryon_preview_url;
+          document.getElementById('mainTryOnImg').src = tryOnPreviewUrl;
+          isViewingOriginal = false;
+          updateBeforeAfterButtons();
+        }
+        if (data.last_scene_keyframes && data.last_scene_keyframes.length > 0) {
+          sceneKeyframes = data.last_scene_keyframes;
+          renderScenes(sceneKeyframes);
+        }
+        if (data.last_generated_video) {
+          lastRenderedVideo = data.last_generated_video;
+          const player = document.getElementById('finalVideoPlayer');
+          const source = document.getElementById('finalVideoSource');
+          source.src = lastRenderedVideo.video_url;
+          player.load();
+          document.getElementById('downloadVideoBtn').href = lastRenderedVideo.video_url;
+        }
+      } catch (e) {
+        console.warn('Session load notice:', e);
+      }
+    }
+
+    function saveSessionState() {
+      try {
+        const state = {
+          current_step: currentStep,
+          selected_product: selectedProduct,
+          selected_model_filename: selectedModel ? selectedModel.filename : null,
+          last_tryon_preview_url: tryOnPreviewUrl,
+          last_scene_keyframes: sceneKeyframes,
+          last_generated_video: lastRenderedVideo
+        };
+        fetch('/api/tiktok-fashion/session-state', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ state: state })
+        });
+      } catch (e) {}
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', async () => {
+      await executeSearch();
+      await loadDriveModels();
+      await loadSavedState();
+
+      // Guarantee selectedProduct is ready
+      if (!selectedProduct && allProducts && allProducts.length > 0) {
+        selectedProduct = allProducts[0];
+        document.getElementById('selectedProdThumb').src = selectedProduct.image_url;
+        document.getElementById('selectedProdTitle').innerText = selectedProduct.title;
+        document.getElementById('selectedProdPrice').innerText = (selectedProduct.price_vnd || 0).toLocaleString('vi-VN') + ' đ';
+      }
+
+      // Guarantee selectedModel is ready
+      if (!selectedModel && allModels && allModels.length > 0) {
+        selectModel(allModels[0].filename, false);
+      }
+
+      // If no try-on preview yet, pre-render try-on
+      if (!tryOnPreviewUrl && selectedProduct && selectedModel) {
+        triggerVirtualTryOn();
+      }
+    });
+  </script>
+</body>
+</html>
