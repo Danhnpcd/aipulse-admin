@@ -607,9 +607,13 @@ async def run_30min_periodic_news_loop() -> None:
     Automatically scans reputable tech news feeds, queues new articles for CEO approval,
     and updates the live portal and Google Sheets CSV report.
     """
-    print("Starting 30-Minute Real Tech News Ingestion Watchdog...")
+    print("⚖️ Starting 30-Minute Real Tech News Ingestion Watchdog (LEGAL COMPLIANCE HOLD ACTIVE)...")
     while True:
         try:
+            # LEGAL GATE: Tuân thủ Nghị định 147/2024/NĐ-CP & Luật SHTT 2022
+            # Tạm dừng toàn bộ chu kỳ tự động cào tin tức báo chí khi chưa có Giấy phép ICP
+            await asyncio.sleep(1800.0)
+            continue
             with db_module.SessionLocal() as db:
                 from app.models.entities import SystemSetting
                 sys_row = db.scalar(select(SystemSetting).where(SystemSetting.id == "singleton"))

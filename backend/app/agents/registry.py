@@ -172,6 +172,65 @@ INITIAL_AGENTS: list[dict[str, Any]] = [
         "cost_limit_usd": 1.0,
         "max_loops": 4,
     },
+    {
+        "id": "legal-compliance-officer",
+        "name": "Trưởng ban Pháp chế & Tuân thủ",
+        "role": "Thẩm định Giấy phép ICP, TMĐT Bộ Công Thương & Tuân thủ Luật Số",
+        "room_id": "compliance-room",
+        "avatar_color": "#f43f5e",
+        "tile_x": 5.45,
+        "tile_y": 10.05,
+        "system_prompt": (
+            "Bạn là Trưởng ban Pháp chế & Tuân thủ (Chief Legal & Compliance Officer). "
+            "Rà soát điều kiện pháp lý toàn diện: Giấy phép trang thông tin điện tử tổng hợp (Nghị định 147/2024/NĐ-CP), "
+            "thông báo website thương mại điện tử với Bộ Công Thương (Nghị định 52/2013/NĐ-CP & 85/2021/NĐ-CP), "
+            "và cổng thanh toán VietQR. Bạn có quyền Veto (phủ quyết) mọi dự án chưa đạt chuẩn an toàn pháp lý."
+        ),
+        "allowed_tools": ["audit_icp_license", "verify_ecommerce_registration", "veto_lifecycle_stage", "issue_compliance_certificate"],
+        "permissions": ["read:compliance", "write:legal_audit", "veto:lifecycle_gate"],
+        "token_limit": 32000,
+        "cost_limit_usd": 2.0,
+        "max_loops": 4,
+    },
+    {
+        "id": "ip-rights-guardian",
+        "name": "Chuyên viên Sở hữu Trí tuệ & Bản quyền",
+        "role": "Kiểm định Bản quyền Tác giả & Hợp đồng Hình ảnh Người mẫu",
+        "room_id": "compliance-room",
+        "avatar_color": "#a855f7",
+        "tile_x": 4.85,
+        "tile_y": 11.25,
+        "system_prompt": (
+            "Bạn là Chuyên viên Sở hữu Trí tuệ & Bản quyền (IP & Rights Guardian). "
+            "Giám sát nghiêm ngặt việc tuân thủ Luật Sở hữu trí tuệ 2005 (sửa đổi 2022) và Điều 32 Bộ luật Dân sự 2015 "
+            "(Quyền của cá nhân đối với hình ảnh). Bắt buộc 100% hình ảnh người mẫu thương mại phải có Model Release "
+            "hoặc là hình ảnh AI tổng hợp độc quyền; cấm sao chép nội dung báo chí trái phép."
+        ),
+        "allowed_tools": ["audit_model_release", "check_copyright_infringement", "scan_trademark_risk"],
+        "permissions": ["read:media_assets", "write:ip_clearance", "audit:image_rights"],
+        "token_limit": 28000,
+        "cost_limit_usd": 1.5,
+        "max_loops": 4,
+    },
+    {
+        "id": "tax-privacy-auditor",
+        "name": "Chuyên viên Thuế & Bảo vệ Dữ liệu Cá nhân",
+        "role": "Quản trị Thuế Kinh doanh Số & Bảo vệ Dữ liệu NĐ 13/2023",
+        "room_id": "compliance-room",
+        "avatar_color": "#06b6d4",
+        "tile_x": 6.05,
+        "tile_y": 11.25,
+        "system_prompt": (
+            "Bạn là Chuyên viên Thuế & Bảo vệ Dữ liệu (Tax & Data Privacy Auditor). "
+            "Giám sát việc kê khai thuế thu nhập cá nhân / kinh doanh trực tuyến theo Thông tư 40/2021/TT-BTC khi phát sinh dòng tiền, "
+            "và tuân thủ Nghị định 13/2023/NĐ-CP về Bảo vệ Dữ liệu Cá nhân (chính sách bảo mật, thu thập consent độc giả)."
+        ),
+        "allowed_tools": ["audit_tax_threshold", "review_privacy_policy", "check_data_consent"],
+        "permissions": ["read:finance", "write:tax_report", "audit:data_privacy"],
+        "token_limit": 24000,
+        "cost_limit_usd": 1.5,
+        "max_loops": 3,
+    },
 ]
 
 

@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 from app.api.analytics_routes import analytics_router
+from app.api.compliance_routes import compliance_router
 from app.api.business_routes import business_router
 from app.api.payment_routes import payment_router
 from app.api.routes import router as api_router
@@ -93,6 +94,7 @@ def create_app() -> FastAPI:
     app.include_router(zalo_router)
     app.include_router(payment_router)
     app.include_router(analytics_router)
+    app.include_router(compliance_router)
 
     @app.websocket("/ws/events")
     async def websocket_events(websocket: WebSocket, since_seq: int = Query(default=0, ge=0)) -> None:

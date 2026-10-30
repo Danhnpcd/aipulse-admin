@@ -88,6 +88,13 @@ def find_unseen_candidate(candidates, existing_html):
 def main():
     print(f"[{datetime.datetime.now()}] Running 30-Minute News Publisher...")
     
+    # LEGAL COMPLIANCE GATE (Nghị định 147/2024/NĐ-CP & Nghị định 119/2020/NĐ-CP)
+    # Tự động cào tin từ báo chí (VNExpress, Thanh Niên) mà không có Giấy phép ICP là hành vi có rủi ro xử phạt 20-30 triệu VNĐ.
+    LEGAL_COMPLIANCE_HOLD = True
+    if LEGAL_COMPLIANCE_HOLD:
+        print("[LEGAL COMPLIANCE GATE] Đã chặn cào tin báo chí tự động. Hệ thống chuyển sang chế độ Tech Log & Nghiên cứu nội bộ, tuân thủ Nghị định 147/2024/NĐ-CP.")
+        return
+    
     # Check current HTML
     target_file = DEPLOY_HTML if DEPLOY_HTML.exists() else WS_HTML
     if not target_file.exists():

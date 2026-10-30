@@ -55,6 +55,16 @@ class TikTokMobileShopScraper:
         and extracts real product title, price, and high-res garment photo.
         """
         print(f"[Mobile Scraper] Accessing TikTok Shop link via Mobile Emulation: {tiktok_url}")
+        # LEGAL GATE: Dừng cào tự động khi chưa có thỏa thuận đại lý chính thức
+        return {
+            "url": tiktok_url,
+            "title": "Tạm dừng cào shop tự động (Đang rà soát thỏa thuận đại lý TikTok Shop)",
+            "price_text": "0 VNĐ",
+            "price_vnd": 0,
+            "commission_rate": 0.0,
+            "garment_image": "",
+            "source": "LEGAL_AUDIT_HOLD"
+        }
         result = {
             "url": tiktok_url,
             "title": "Trang Phục Hot Trend TikTok Shop",

@@ -189,6 +189,12 @@ class TikTokAutoUploader:
         - Mode 'playwright': Uses headless browser to automate tiktok.com/creator-center/upload
         - Mode 'auto': Automatically selects Playwright if cookies exist, otherwise generates 1-Click Publishing Kit.
         """
+        # LEGAL AUDIT GATE (Điều 32 Bộ luật Dân sự 2015 & Nghị định 15/2020/NĐ-CP)
+        return {
+            "success": False,
+            "error": "LEGAL_AUDIT_HOLD",
+            "message": "Đã dừng tự động đăng tải theo lệnh kiểm duyệt pháp lý. Cần văn bản phê duyệt của Team Pháp Lý AI về bản quyền hình ảnh người mẫu (Điều 32 BLDS 2015) và thỏa thuận đại lý TikTok Shop."
+        }
         cookies_file = Path(self.config.get("session_cookies_file", ""))
         has_cookies = cookies_file.exists() and cookies_file.stat().st_size > 10
 

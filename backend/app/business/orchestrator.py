@@ -105,6 +105,30 @@ class AutonomousBusinessOrchestrator:
             return False, "BUDGET_EXCEEDED", 0.0
         return True, "OK", remaining
 
+    def _check_legal_compliance_gate(self, db: Session, project: Project) -> tuple[bool, str]:
+        """
+        Legal & Compliance Gate Check (Team Pháp Lý AI):
+        Thẩm định 5 trụ cột pháp luật Việt Nam:
+        1. Nghị định 147/2024/NĐ-CP (Giấy phép ICP đối với trang tin điện tử tổng hợp).
+        2. Điều 32 Bộ luật Dân sự 2015 (Quyền hình ảnh cá nhân / Model Release).
+        3. Nghị định 52/2013/NĐ-CP & 85/2021/NĐ-CP (Đăng ký website TMĐT với Bộ Công Thương).
+        4. Thông tư 40/2021/TT-BTC (Nghĩa vụ thuế kinh doanh số).
+        5. Nghị định 13/2023/NĐ-CP (Bảo vệ dữ liệu cá nhân & Consent).
+        """
+        if project.status == "PAUSED_LEGAL_AUDIT":
+            return False, "Dự án đang trong trạng thái TẠM DỪNG KIỂM TOÁN PHÁP LÝ (PAUSED_LEGAL_AUDIT). Cần chứng nhận của Team Pháp Lý trước khi tiếp tục."
+
+        slug = (project.slug or "").lower()
+        if "news" in slug or "aipulse" in slug:
+            if project.status != "SAFE_MODE":
+                return False, "Cổng Pháp Lý: Dự án tin tức chưa có Giấy phép Trang thông tin điện tử tổng hợp (ICP) theo Nghị định 147/2024/NĐ-CP. Cần chuyển sang SAFE_MODE (Blog cá nhân)."
+
+        if "tiktok" in slug or "fashion" in slug:
+            if project.status != "SAFE_MODE":
+                return False, "Cổng Pháp Lý: Dự án video thời trang chưa hoàn tất kiểm toán bản quyền người mẫu (Điều 32 BLDS 2015). Cần chứng nhận 100% người mẫu ảo AI."
+
+        return True, "LEGAL_CLEARANCE_PASSED"
+
     def _log_decision(
         self,
         db: Session,
@@ -447,6 +471,24 @@ class AutonomousBusinessOrchestrator:
 
         # 6. READY_FOR_REVIEW -> DEPLOYMENT
         if cur == ProjectLifecycleStage.READY_FOR_REVIEW.value:
+            legal_ok, legal_reason = self._check_legal_compliance_gate(db, project)
+            if not legal_ok:
+                project.status = "PAUSED_LEGAL_AUDIT"
+                self._log_decision(
+                    db,
+                    project_id=project.id,
+                    stage_from=cur,
+                    stage_to=cur,
+                    decision_type="LEGAL_GATE_VETO",
+                    inputs={"reason": legal_reason},
+                    options=["Tạm dừng dự án để bổ sung giấy phép & kiểm toán pháp lý", "Triển khai mạo hiểm (Bị nghiêm cấm)"],
+                    rationale=legal_reason,
+                    estimated_cost_usd=0.0,
+                    success_criteria="Có giấy phép ICP / Thẩm định Model Release / Đăng ký TMĐT hợp lệ.",
+                    outcome="LEGAL_GATE_HALTED",
+                )
+                db.commit()
+                return {"stage": project.stage, "halted": True, "legal_gate_error": legal_reason}
             artifact = db.scalar(select(ProductArtifact).where(ProductArtifact.project_id == project.id))
             if not artifact or not artifact.test_passed:
                 raise HTTPException(status_code=409, detail="Sản phẩm chưa đạt kiểm thử QA, không thể triển khai.")
