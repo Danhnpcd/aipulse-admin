@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AuraMuse — Blog Thời Trang & Lookbook Người Mẫu Ảo AI (Bởi Danh Nguyen)</title>
+  
+  <!-- SEO & Open Graph Meta Tags -->
+  <meta name="description" content="Blog cá nhân chuyên review thời trang nữ, gợi ý outfit và video lookbook được trình diễn bởi người mẫu ảo AI tạo sinh (Synthetic AI Personas). Khám phá các mẫu váy đầm hot trend TikTok Shop.">
+  <meta name="keywords" content="thời trang nữ, blog thời trang, người mẫu AI, tiktok shop affiliate, váy đầm hoa nhí, dạ tweed, outfit công sở, mix and match">
+  <meta name="author" content="Danh Nguyen">
+  <meta property="og:title" content="AuraMuse — Blog Thời Trang & Lookbook Người Mẫu Ảo AI">
+  <meta property="og:description" content="Khám phá các bản phối thời trang nữ hot trend qua ống kính người mẫu ảo AI. Mua trực tiếp trên TikTok Shop.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- GOOGLE ADSENSE CODE INTEGRATION -->
+  <!-- Thay thế ca-pub-XXXXXXXXXXXXXXXX bằng Mã Khách Hàng Google AdSense của bạn khi được phê duyệt -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6829103948572190" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: #0f1626;
+      --bg-card-hover: #162036;
+      --border: #1e293b;
+      --pink: #ff2d55;
+      --pink-glow: rgba(255, 45, 85, 0.35);
+      --gold: #f59e0b;
+      --gold-glow: rgba(245, 158, 11, 0.3);
+      --cyan: #00f2fe;
+      --purple: #a855f7;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-serif: 'Playfair Display', serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP LEGAL & COMPLIANCE BAR */
+    .top-compliance-bar {
+      background: linear-gradient(90deg, #1e1b4b, #2d103b);
+      border-bottom: 1px solid #4338ca;
+      padding: 6px 16px;
+      font-size: 11px;
+      color: #cbd5e1;
+      text-align: center;
+    }
+    .top-compliance-bar strong { color: #fbcfe8; }
+    .top-compliance-bar a { color: #38bdf8; text-decoration: underline; margin-left: 6px; }
+
+    /* HEADER */
+    header {
+      background: rgba(15, 22, 38, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 20px;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px var(--pink-glow);
+    }
+    .brand-title-wrap h1 {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #ffffff, #fbcfe8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .author-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .btn-tiktok-pill {
+      background: linear-gradient(135deg, #00f2fe, #ff2d55);
+      color: #000;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 16px rgba(255, 45, 85, 0.3);
+      transition: transform 0.2s;
+    }
+    .btn-tiktok-pill:hover { transform: scale(1.04); }
+
+    /* GOOGLE ADSENSE BANNER CONTAINER */
+    .adsense-slot-container {
+      max-width: 1200px;
+      margin: 18px auto 6px;
+      padding: 0 16px;
+      width: 100%;
+    }
+    .adsense-card {
+      background: rgba(15, 22, 38, 0.6);
+      border: 1px dashed rgba(148, 163, 184, 0.25);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ad-label {
+      position: absolute;
+      top: 4px;
+      left: 10px;
+      font-size: 9px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .ad-placeholder-content {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .ad-text-box h4 {
+      font-size: 13px;
+      color: #fde68a;
+      margin-bottom: 2px;
+    }
+    .ad-text-box p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .btn-ad-cta {
+      background: #1e293b;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* HERO INTRO */
+    .hero-section {
+      max-width: 1200px;
+      margin: 20px auto 16px;
+      padding: 0 16px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 45, 85, 0.12);
+      border: 1px solid rgba(255, 45, 85, 0.3);
+      color: var(--pink);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 70%, #fbcfe8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* FILTER TABS */
+    .filter-bar {
+      max-width: 1200px;
+      margin: 20px auto 24px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--pink);
+      border-color: var(--pink);
+      color: #fff;
+      box-shadow: 0 0 14px var(--pink-glow);
+    }
+
+    /* MAIN BLOG FEED */
+    .blog-feed-container {
+      max-width: 1200px;
+      margin: 0 auto 50px;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 28px;
+      flex: 1;
+    }
+
+    /* ARTICLE CARD */
+    .article-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 45, 85, 0.4);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    }
+
+    /* EMBEDDED VIDEO / MEDIA BOX */
+    .media-box {
+      position: relative;
+      background: #000;
+      width: 100%;
+      aspect-ratio: 9/12;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fashion-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .media-overlay-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      z-index: 2;
+    }
+    .ai-model-tag {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(139, 92, 246, 0.85);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      z-index: 2;
+    }
+    .video-control-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+    .video-control-btn:hover { background: var(--pink); border-color: var(--pink); }
+
+    /* CARD BODY CONTENT */
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 10px;
+      color: #fff;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-snippet {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* STYLING SPECS PILLS */
+    .styling-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .spec-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: #cbd5e1;
+    }
+
+    /* PRODUCT PRICING & TIKTOK SHOP CTA */
+    .product-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 45, 85, 0.25);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: auto;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .sale-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--pink);
+      font-family: var(--font-mono);
+    }
+    .original-price {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-decoration: line-through;
+      margin-left: 6px;
+    }
+    .commission-badge {
+      font-size: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* BIG TIKTOK SHOP BUTTON */
+    .btn-buy-tiktok {
+      background: linear-gradient(135deg, #00f2fe, #ff2d55);
+      color: #000;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 45, 85, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-buy-tiktok:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 45, 85, 0.5);
+    }
+
+    .btn-read-more {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: 8px;
+      margin-top: 8px;
+      width: 100%;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-read-more:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    /* FULL ARTICLE MODAL */
+    .article-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-dialog {
+      background: #0d1322;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 820px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      color: #f8fafc;
+      position: relative;
+    }
+    .btn-close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #1e293b;
+      border: none;
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060910;
+      border-top: 1px solid var(--border);
+      padding: 32px 20px;
+      color: var(--text-dim);
+      font-size: 12px;
+      margin-top: auto;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+    .footer-legal-notice {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 11px;
+      line-height: 1.6;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 24px; }
+      .blog-feed-container { grid-template-columns: 1fr; }
+      .brand-title-wrap h1 { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. TOP LEGAL COMPLIANCE BAR -->
+  <div class="top-compliance-bar">
+    ⚖️ <strong>BLOG THỜI TRANG CÁ NHÂN & LOOKBOOK AI:</strong> Biên tập bởi <strong>Danh Nguyen</strong>. Toàn bộ hình ảnh & video được tạo sinh từ người mẫu ảo AI (Synthetic Personas), tuân thủ <strong>Nghị định 147/2024/NĐ-CP</strong> và Điều 32 Bộ luật Dân sự 2015.
+    <a href="#complianceModal" onclick="openComplianceInfo()">Chi tiết pháp lý & Miễn trừ ↗</a>
+  </div>
+
+  <!-- 2. HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="./" class="brand-box">
+        <div class="brand-logo">👗</div>
+        <div class="brand-title-wrap">
+          <h1>AuraMuse Lookbook</h1>
+          <div class="brand-subtitle">
+            <span>By Danh Nguyen</span>
+            <span class="author-badge">AI Fashion Stylist</span>
+          </div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="#feed" class="nav-link active">Lookbook Hot</a>
+        <a href="#about" class="nav-link" onclick="openAboutModal()">Về Tác Giả</a>
+        <a href="/tiktok-studio/" class="nav-link" title="Mở Xưởng Video Studio">⚙️ Studio</a>
+        <a href="https://www.tiktok.com/@fashionmuse.vn" target="_blank" rel="noreferrer" class="btn-tiktok-pill">
+          <span>🎵 TikTok Kênh >2K</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. GOOGLE ADSENSE TOP LEADERBOARD AD SLOT -->
+  <div class="adsense-slot-container">
+    <div class="adsense-card">
+      <span class="ad-label">Quảng cáo Google AdSense</span>
+      <!-- Thẻ AdSense chính thức (Tự động kích hoạt khi có ca-pub ID) -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6829103948572190"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+      <!-- Fallback Visual Banner khi AdSense đang trong quá trình nghiệm thu -->
+      <div class="ad-placeholder-content">
+        <div class="ad-text-box">
+          <h4>🌟 Ưu Đãi Mua Sắm Thời Trang Nữ Độc Quyền</h4>
+          <p>Nhận mã giảm giá 30K - 50K cho đơn hàng thời trang đầu tiên qua giỏ hàng vàng TikTok Shop!</p>
+        </div>
+        <a href="#feed" class="btn-ad-cta">Khám Phá Bộ Sưu Tập ↓</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-badge">✨ Douyin & Korean Outfit Lookbook 2026</div>
+    <h2 class="hero-title">Nhật Ký Phối Đồ Thông Minh & Review Thời Trang Cùng Người Mẫu Ảo AI</h2>
+    <p class="hero-desc">
+      Bộ sưu tập các mẫu váy đầm, set dạ và outfit hot trend bán chạy nhất trên TikTok Shop. 
+      Mỗi thiết kế được trình diễn bởi các nàng thơ AI độc quyền, giúp nàng ngắm trọn vẹn form dáng, chất vải và cách phối phụ kiện hoàn hảo trước khi bấm mua.
+    </p>
+  </section>
+
+  <!-- 5. FILTER TABS -->
+  <div class="filter-bar">
+    <button type="button" class="filter-btn active" onclick="filterArticles('ALL')">Tất Cả Outfits (5)</button>
+    <button type="button" class="filter-btn" onclick="filterArticles('VAY_DAM')">Váy Đầm Nàng Thơ</button>
+    <button type="button" class="filter-btn" onclick="filterArticles('DA_TWEED')">Set Dạ Tweed Old Money</button>
+    <button type="button" class="filter-btn" onclick="filterArticles('CONG_SO')">Công Sở Thanh Lịch</button>
+    <button type="button" class="filter-btn" onclick="filterArticles('Y2K')">GenZ & Y2K Năng Động</button>
+    <button type="button" class="filter-btn" onclick="filterArticles('DA_TIEC')">Đầm Tiệc Quyến Rũ</button>
+  </div>
+
+  <!-- 6. BLOG POSTS FEED (GRID) -->
+  <main class="blog-feed-container" id="articlesGrid">
+    <!-- Articles rendered dynamically via JavaScript -->
+  </main>
+
+  <!-- 7. GOOGLE ADSENSE IN-CONTENT BANNER (MID PAGE) -->
+  <div class="adsense-slot-container" style="margin-bottom: 40px;">
+    <div class="adsense-card">
+      <span class="ad-label">Tài trợ đề xuất Google</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6829103948572190"
+           data-ad-slot="9876543210"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <div class="ad-placeholder-content">
+        <div class="ad-text-box">
+          <h4>💡 Bạn Muốn Trở Thành Đối Tác Shop Hoặc Nhận Booking?</h4>
+          <p>Gửi mẫu trang phục để xưởng AI dựng video lookbook 4K chất lượng cao đăng kênh TikTok >2K Follower.</p>
+        </div>
+        <a href="mailto:danhnpcd@gmail.com" class="btn-ad-cta">Liên Hệ Hợp Tác: danhnpcd@gmail.com ✉</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. FULL ARTICLE MODAL -->
+  <div id="articleModal" class="article-modal">
+    <div class="modal-dialog">
+      <button type="button" class="btn-close-modal" onclick="closeArticleModal()">✕</button>
+      <div id="modalContent">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div style="display:flex; justify-content:center; align-items:center; gap:8px;">
+        <span style="font-size:22px;">👗</span>
+        <strong style="color:#fff; font-size:15px;">AuraMuse AI Fashion Lookbook</strong>
+      </div>
+      <p>Trang blog cá nhân chuyên đánh giá xu hướng thời trang và sáng tạo nội dung số bằng Trí tuệ Nhân tạo.</p>
+      
+      <div class="footer-legal-notice">
+        ⚖️ <strong>Tuân Thủ Pháp Luật Việt Nam:</strong> Trang web là <em>Trang thông tin điện tử cá nhân</em> hoạt động theo đúng quy định tại <strong>Nghị định 147/2024/NĐ-CP</strong> và Luật Sở hữu trí tuệ 2022. Toàn bộ người mẫu xuất hiện trên website là <strong>nhân vật ảo AI tổng hợp (Synthetic AI Personas)</strong> được tạo ra bởi mô hình AI tạo sinh, không sử dụng hoặc mô phỏng hình ảnh của bất kỳ cá nhân người thật nào, bảo đảm 100% quyền nhân thân theo <strong>Điều 32 Bộ luật Dân sự 2015</strong>. Các nút đặt hàng điều hướng trực tiếp sang nền tảng <strong>TikTok Shop</strong> thông qua chương trình Tiếp thị liên kết (TikTok Shop Affiliate).
+      </div>
+
+      <div style="color:var(--text-dim); font-size:11px;">
+        © 2026 AuraMuse. Thiết kế & vận hành bởi Danh Nguyen (danhnpcd@gmail.com). Đã tích hợp Google AdSense & TikTok Shop Affiliate Napas 24/7.
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC & ARTICLES DATA -->
+  <script>
+    var ARTICLES = [
+      {
+        id: "post-01",
+        category: "VAY_DAM",
+        categoryName: "Váy Đầm Nàng Thơ",
+        modelName: "Linh Nhi",
+        modelBadge: "Nàng Thơ Hàn Quốc 🌸",
+        title: "Đầm Babydoll Tay Bồng Hoa Nhí Vintage — Bí Quyết Hack 5 Tuổi & Giấu Khuyết Điểm Cho Nàng 1m50",
+        date: "31/10/2026",
+        readTime: "3 phút đọc",
+        videoFile: "tiktok_fashion_15s_20261030_005014.mp4",
+        previewImage: "/api/tiktok-fashion/tryon-preview/TREND-FASH-001_Mau_Mac_Trang_Phuc_That.jpg",
+        fallbackThumb: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=700&q=80",
+        salePrice: "189.000 VNĐ",
+        originalPrice: "280.000 VNĐ",
+        discount: "-32%",
+        commissionVnd: "37.800 VNĐ (Hoa hồng 20%)",
+        tiktokLink: "https://www.tiktok.com/tag/dambabydoll",
+        snippet: "Mẫu đầm babydoll hoa nhí lót lụa Habutai 2 lớp siêu mát, cổ vuông tôn xương quai xanh và tay bồng giấu bắp tay to hoàn hảo cho các buổi hẹn hò cà phê cuối tuần.",
+        fabricDetail: "Voan tơ dệt sợi hoa nhí mềm mại, lớp lót trong bằng lụa Habutai mềm mịn, thấm hút mồ hôi, không nhăn dù giặt máy.",
+        bodyHack: "Dáng chữ A xòe bồng giấu bụng dưới 100%, tạo hiệu ứng chân dài thon gọn cho các nàng từ 1m48 đến 1m62.",
+        stylingTips: "Phối cùng túi cói vintage, giày mary jane hoặc giày búp bê kem; kẹp tóc nơ ngọc trai để chuẩn visual nữ thần thanh xuân."
+      },
+      {
+        id: "post-02",
+        category: "DA_TWEED",
+        categoryName: "Dạ Tweed Old Money",
+        modelName: "Maya",
+        modelBadge: "Douyin Sành Điệu 💎",
+        title: "Set Dạ Tweed Cổ Điển Kèm Chân Váy Chữ A — Biến Hình Tiểu Thư Sang Chảnh Mùa Tiệc Tùng",
+        date: "30/10/2026",
+        readTime: "4 phút đọc",
+        videoFile: "tiktok_fashion_15s_20261030_005744.mp4",
+        previewImage: "/api/tiktok-fashion/tryon-preview/TREND-FASH-002_Mau_Mac_Trang_Phuc_That.jpg",
+        fallbackThumb: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=80",
+        salePrice: "349.000 VNĐ",
+        originalPrice: "550.000 VNĐ",
+        discount: "-36%",
+        commissionVnd: "76.780 VNĐ (Hoa hồng 22%)",
+        tiktokLink: "https://www.tiktok.com/tag/datweed",
+        snippet: "Được mệnh danh là 'vũ khí Old Money', set dạ tweed dệt kim tuyến cúc ngọc trai mạ vàng mang lại diện mạo sang trọng, quyền quý chuẩn tiểu thư Douyin.",
+        fabricDetail: "Dạ tweed dệt nổi sợi kim tuyến phản quang lấp lánh nhẹ dưới ánh đèn tiệc, lớp lót gió mềm chống dặm ngứa tuyệt đối.",
+        bodyHack: "Áo lửng croptop ngang hông tạo tỉ lệ cơ thể vàng (1/3), kết hợp chân váy chữ A cạp cao hack chân dài miên man.",
+        stylingTips: "Kết hợp bốt cổ thấp da bóng, khuyên tai ngọc trai Dior và túi kẹp nách mini đen để hoàn thiện outfit dạ tiệc."
+      },
+      {
+        id: "post-03",
+        category: "CONG_SO",
+        categoryName: "Công Sở Thanh Lịch",
+        modelName: "Minh Thư",
+        modelBadge: "Quý Cô Hiện Đại 💼",
+        title: "Blazer Dáng Lửng Kèm Quần Tây Ống Suông — Chuẩn Phong Cách Công Sở Thời Thượng Không Bị Già",
+        date: "29/10/2026",
+        readTime: "3 phút đọc",
+        videoFile: "tiktok_fashion_15s_20261030_005927.mp4",
+        previewImage: "/api/tiktok-fashion/tryon-preview/TREND-FASH-003_Mau_Mac_Trang_Phuc_That.jpg",
+        fallbackThumb: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=700&q=80",
+        salePrice: "279.000 VNĐ",
+        originalPrice: "420.000 VNĐ",
+        discount: "-33%",
+        commissionVnd: "55.800 VNĐ (Hoa hồng 20%)",
+        tiktokLink: "https://www.tiktok.com/tag/blazercongso",
+        snippet: "Giải pháp cho những ngày 'không biết mặc gì đi làm': Set blazer cách tân màu be pastel giúp nàng vừa chuyên nghiệp vừa cuốn hút nổi bật chốn văn phòng.",
+        fabricDetail: "Vải tuyết mưa Hàn Quốc cao cấp, đứng form áo, không bai xù hay đổ lông sau khi giặt nhiều lần.",
+        bodyHack: "Quần ống suông cạp cao che hoàn toàn khuyết điểm chân cong hoặc đùi to; đệm vai nhẹ giúp lưng thẳng và dáng đi uyển chuyển.",
+        stylingTips: "Mặc bên trong một chiếc áo 2 dây lụa satin trắng hoặc áo quây, đi cùng giày cao gót mũi nhọn 5cm."
+      },
+      {
+        id: "post-04",
+        category: "Y2K",
+        categoryName: "GenZ & Y2K Năng Động",
+        modelName: "Bảo Châu",
+        modelBadge: "GenZ Streetwear ⚡",
+        title: "Áo Baby Tee Phối Chân Váy Tennis Xếp Ly — Năng Động Săn Trend Y2K Triệu View",
+        date: "28/10/2026",
+        readTime: "3 phút đọc",
+        videoFile: "tiktok_fashion_15s_20261030_011614.mp4",
+        previewImage: "/api/tiktok-fashion/tryon-preview/TREND-FASH-004_Mau_Mac_Trang_Phuc_That.jpg",
+        fallbackThumb: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=700&q=80",
+        salePrice: "149.000 VNĐ",
+        originalPrice: "230.000 VNĐ",
+        discount: "-35%",
+        commissionVnd: "29.800 VNĐ (Hoa hồng 20%)",
+        tiktokLink: "https://www.tiktok.com/tag/y2kfashion",
+        snippet: "Bùng nổ năng lượng tuổi trẻ cùng set đồ Baby Tee in graphic retro và chân váy tennis xếp ly kèm quần bảo hộ kín đáo, tự tin dạo phố và nhảy trend TikTok.",
+        fabricDetail: "Cotton 100% co giãn 4 chiều định lượng 250gsm dày dặn, thấm hút mồ hôi nhanh trong thời tiết nắng nóng.",
+        bodyHack: "Chân váy xếp ly xòe tạo đường cong hông quyến rũ, khoe trọn vòng eo con kiến và đôi chân năng động.",
+        stylingTips: "Đi giày sneaker trắng chunky cổ cao, đeo tai nghe chụp tai headphone và túi tote vải canvas."
+      },
+      {
+        id: "post-05",
+        category: "DA_TIEC",
+        categoryName: "Đầm Tiệc Quyến Rũ",
+        modelName: "An Nhiên",
+        modelBadge: "Nữ Thần Dạ Tiệc 🌙",
+        title: "Đầm Dạ Hội Lụa Satin Cut-Out Tinh Tế — Thần Thái Quyến Rũ Cho Đêm Tiệc Triệu View",
+        date: "27/10/2026",
+        readTime: "4 phút đọc",
+        videoFile: "tiktok_fashion_15s_20261030_014602.mp4",
+        previewImage: "/api/tiktok-fashion/tryon-preview/TREND-FASH-005_Mau_Mac_Trang_Phuc_That.jpg",
+        fallbackThumb: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=700&q=80",
+        salePrice: "389.000 VNĐ",
+        originalPrice: "620.000 VNĐ",
+        discount: "-37%",
+        commissionVnd: "97.250 VNĐ (Hoa hồng 25%)",
+        tiktokLink: "https://www.tiktok.com/tag/damdahoi",
+        snippet: "Mẫu đầm dạ hội lụa satin cao cấp màu xanh ngọc lục bảo với đường cắt cut-out tinh tế ở eo, biến nàng thành tâm điểm thu hút mọi ánh nhìn trong mọi bữa tiệc.",
+        fabricDetail: "Lụa Satin dệt ánh nhũ ngọc trai mềm rủ tự nhiên, tạo độ óng ả bắt mắt dưới ánh đèn flash và ánh nến.",
+        bodyHack: "Đường xẻ tà cao khoe đôi chân thon dài quyến rũ kết hợp cổ yếm khoe bờ vai trần và lưng trần gợi cảm.",
+        stylingTips: "Phối cùng clutch cầm tay đính đá, giày sandals cao gót quai mảnh ánh bạc và màu son đỏ rượu vang quyền lực."
+      }
+    ];
+
+    function renderArticles(list) {
+      var container = document.getElementById("articlesGrid");
+      container.innerHTML = "";
+
+      list.forEach(function(item, idx) {
+        var videoSrc = "/api/tiktok-fashion/video-file/" + item.videoFile;
+        var videoId = "video-" + item.id;
+        var muteId = "mute-btn-" + item.id;
+
+        var html = `
+          <article class="article-card" id="card-${item.id}">
+            <div class="media-box">
+              <span class="media-overlay-badge">🎥 Video Người Mẫu AI 15s</span>
+              <span class="ai-model-tag">${item.modelBadge}</span>
+              
+              <video id="${videoId}" class="fashion-video" loop playsinline muted preload="metadata" poster="${item.previewImage}" onerror="this.poster='${item.fallbackThumb}'">
+                <source src="${videoSrc}" type="video/mp4">
+              </video>
+
+              <button type="button" id="${muteId}" class="video-control-btn" onclick="toggleVideoSound('${videoId}', '${muteId}')" title="Bật/Tắt Âm Thanh">
+                🔇
+              </button>
+            </div>
+
+            <div class="card-body">
+              <div class="card-meta">
+                <span>📅 ${item.date}</span>
+                <span>⏱️ ${item.readTime}</span>
+              </div>
+
+              <h3 class="card-title">${item.title}</h3>
+              <p class="card-snippet">${item.snippet}</p>
+
+              <div class="styling-specs">
+                <span class="spec-pill">🧵 ${item.fabricDetail.split(',')[0]}</span>
+                <span class="spec-pill">👗 ${item.categoryName}</span>
+              </div>
+
+              <div class="product-box">
+                <div class="price-row">
+                  <div>
+                    <span class="sale-price">${item.salePrice}</span>
+                    <span class="original-price">${item.originalPrice}</span>
+                  </div>
+                  <span class="commission-badge">Giỏ Hàng TikTok</span>
+                </div>
+
+                <a href="${item.tiktokLink}" target="_blank" rel="noreferrer" class="btn-buy-tiktok" onclick="trackAffiliateClick('${item.id}', '${item.title}')">
+                  <span>🛍️ Mua Ngay Trên TikTok Shop</span>
+                  <span>→</span>
+                </a>
+
+                <button type="button" class="btn-read-more" onclick="openArticleModal('${item.id}')">
+                  📖 Xem Đánh Giá Chi Tiết & Tips Phối Đồ
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+        container.innerHTML += html;
+      });
+
+      // Observe videos to auto-play on viewport entry
+      setupVideoIntersectionObserver();
+    }
+
+    function toggleVideoSound(videoId, btnId) {
+      var v = document.getElementById(videoId);
+      var btn = document.getElementById(btnId);
+      if (!v) return;
+
+      if (v.muted) {
+        v.muted = false;
+        btn.textContent = "🔊";
+      } else {
+        v.muted = true;
+        btn.textContent = "🔇";
+      }
+    }
+
+    function setupVideoIntersectionObserver() {
+      if (!('IntersectionObserver' in window)) return;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          var video = entry.target;
+          if (entry.isIntersecting) {
+            video.play().catch(function() {});
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.35 });
+
+      document.querySelectorAll(".fashion-video").forEach(function(v) {
+        observer.observe(v);
+      });
+    }
+
+    function filterArticles(cat) {
+      document.querySelectorAll(".filter-btn").forEach(function(btn) {
+        btn.classList.remove("active");
+      });
+      event.target.classList.add("active");
+
+      if (cat === "ALL") {
+        renderArticles(ARTICLES);
+      } else {
+        var filtered = ARTICLES.filter(function(a) { return a.category === cat; });
+        renderArticles(filtered);
+      }
+    }
+
+    function openArticleModal(id) {
+      var item = ARTICLES.find(function(a) { return a.id === id; });
+      if (!item) return;
+
+      var modal = document.getElementById("articleModal");
+      var content = document.getElementById("modalContent");
+
+      content.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <span class="ai-model-tag" style="position:static;">${item.modelBadge}</span>
+          <span style="font-size:12px; color:var(--text-muted);">${item.categoryName} • Xuất bản ngày ${item.date}</span>
+        </div>
+
+        <h2 style="font-family:var(--font-serif); font-size:24px; line-height:1.3; margin-bottom:16px;">
+          ${item.title}
+        </h2>
+
+        <div style="background:#070a14; border-radius:14px; overflow:hidden; margin-bottom:20px; aspect-ratio:9/12; max-height:480px; display:flex; justify-content:center;">
+          <video controls autoplay loop playsinline style="height:100%; object-fit:cover;">
+            <source src="/api/tiktok-fashion/video-file/${item.videoFile}" type="video/mp4">
+          </video>
+        </div>
+
+        <div style="line-height:1.7; font-size:14px; color:#e2e8f0; margin-bottom:24px;">
+          <h3 style="color:#fbcfe8; font-size:16px; margin:16px 0 8px;">1. Bối Cảnh & Cảm Hứng Phong Cách</h3>
+          <p>${item.snippet}</p>
+
+          <h3 style="color:#fbcfe8; font-size:16px; margin:16px 0 8px;">2. Đánh Giá Chi Tiết Chất Vải & Đường May</h3>
+          <p><strong>Chất liệu chính:</strong> ${item.fabricDetail}</p>
+
+          <h3 style="color:#fbcfe8; font-size:16px; margin:16px 0 8px;">3. Bí Quyết Hack Dáng Cho Nàng</h3>
+          <p>${item.bodyHack}</p>
+
+          <h3 style="color:#fbcfe8; font-size:16px; margin:16px 0 8px;">4. Gợi Ý Phối Đồ & Phụ Kiện (Mix & Match Tips)</h3>
+          <p>${item.stylingTips}</p>
+        </div>
+
+        <!-- Google AdSense In-Modal Slot -->
+        <div class="adsense-card" style="margin-bottom:20px;">
+          <span class="ad-label">Quảng Cáo Google</span>
+          <div style="padding:10px; font-size:12px; color:#94a3b8;">
+            🎁 <em>Deal độc quyền: Nhấp vào liên kết giỏ hàng TikTok bên dưới để nhận mã giảm giá lên đến 50K.</em>
+          </div>
+        </div>
+
+        <div style="background:#090d18; border:1px solid #ff2d55; border-radius:14px; padding:18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="font-size:22px; font-weight:800; color:#ff2d55; font-family:var(--font-mono);">${item.salePrice}</div>
+            <div style="font-size:12px; color:#94a3b8;">Giá gốc: <del>${item.originalPrice}</del> (${item.discount})</div>
+          </div>
+          <a href="${item.tiktokLink}" target="_blank" rel="noreferrer" class="btn-buy-tiktok" style="max-width:280px;" onclick="trackAffiliateClick('${item.id}', '${item.title}')">
+            <span>🛍️ Mua Ngay Trên TikTok Shop</span>
+            <span>↗</span>
+          </a>
+        </div>
+      `;
+
+      modal.style.display = "flex";
+    }
+
+    function closeArticleModal() {
+      var modal = document.getElementById("articleModal");
+      modal.style.display = "none";
+      var content = document.getElementById("modalContent");
+      // Stop video in modal
+      var v = content.querySelector("video");
+      if (v) v.pause();
+    }
+
+    function openAboutModal() {
+      alert("AuraMuse Fashion Lookbook — Trang Blog Cá Nhân của Danh Nguyen (danhnpcd@gmail.com).\\n\\nChuyên ứng dụng công nghệ Trí tuệ Nhân tạo tạo sinh (Generative AI) để trình diễn các bộ sưu tập thời trang nữ hot trend trên TikTok Shop.\\n\\n100% người mẫu là nhân vật ảo AI (Synthetic Personas), bảo đảm tuân thủ Điều 32 Bộ luật Dân sự 2015 và Nghị định 147/2024/NĐ-CP.");
+    }
+
+    function openComplianceInfo() {
+      alert("THÔNG BÁO PHÁP LÝ & TUÂN THỦ LUẬT SỐ:\\n\\n1. Nghị định 147/2024/NĐ-CP: Website hoạt động theo hình thức Trang thông tin điện tử cá nhân, chia sẻ góc nhìn thẩm mỹ và nghệ thuật AI của tác giả, không sao chép tin tức báo chí tổng hợp nên không thuộc diện phải cấp phép ICP.\\n\\n2. Điều 32 Bộ luật Dân sự 2015: 100% hình ảnh và video người mẫu trên trang được sinh ra từ các mô hình AI tạo sinh (Synthetic AI Personas), không sử dụng hình ảnh của người thật.\\n\\n3. Thương mại điện tử: Toàn bộ liên kết mua sắm điều hướng trực tiếp sang nền tảng TikTok Shop.");
+    }
+
+    function trackAffiliateClick(postId, title) {
+      // Send real analytics event to backend
+      try {
+        fetch("/api/analytics/track-interaction", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event_type: "TIKTOK_AFFILIATE_CLICK",
+            target_id: postId,
+            metadata: { post_title: title, source: "fashion_ai_blog" }
+          })
+        }).catch(function() {});
+      } catch (e) {}
+    }
+
+    // Initialize on load
+    window.addEventListener("DOMContentLoaded", function() {
+      renderArticles(ARTICLES);
+    });
+  </script>
+</body>
+</html>

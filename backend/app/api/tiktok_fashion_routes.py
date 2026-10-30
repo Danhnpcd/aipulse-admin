@@ -458,9 +458,10 @@ async def get_random_model_photo() -> Dict[str, Any]:
 @router.get("/tryon-preview/{filename}")
 async def get_tryon_preview(filename: str):
     """Serve generated virtual try-on preview image."""
-    preview_file = TRYON_PREVIEWS_DIR / filename
-    if preview_file.exists():
-        return FileResponse(preview_file, media_type="image/jpeg", headers={"Cache-Control": "no-cache"})
+    for folder in [TRYON_PREVIEWS_DIR, WORKSPACE_DIR / "published" / "ai_dressed_models", WORKSPACE_DIR / "published" / "scene_keyframes"]:
+        f = folder / filename
+        if f.exists():
+            return FileResponse(f, media_type="image/jpeg", headers={"Cache-Control": "public, max-age=86400"})
     raise HTTPException(status_code=404, detail="Preview not found")
 
 
